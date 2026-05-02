@@ -1,5 +1,7 @@
 <template>
   <div class="app-layout">
+    <CmsBar />
+    <CmsInlineEditor />
     <AppHeader />
     <main>
       <slot />

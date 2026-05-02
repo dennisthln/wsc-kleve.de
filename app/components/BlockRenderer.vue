@@ -6,6 +6,30 @@ const props = defineProps<{
   blocks?: any[]
 }>()
 
+const { editMode, selectedBlockIndex, selectBlock, user } = usePayloadCms()
+
+const blockLabel = (block: any) => {
+  const labels: Record<string, string> = {
+    hero: 'Hero',
+    pegel: 'Pegel',
+    features: 'Features',
+    content: 'Content',
+    cta: 'CTA',
+    info: 'Info',
+    person: 'Person',
+  }
+
+  return labels[block.blockType] || block.blockType || 'Block'
+}
+
+const selectEditableBlock = (index: number, event: MouseEvent) => {
+  if (editMode.value && user.value) {
+    event.preventDefault()
+    event.stopPropagation()
+    selectBlock(index)
+  }
+}
+
 const getIcon = (iconName: string) => {
   switch (iconName) {
     case 'sailing': return Ship
@@ -20,7 +44,15 @@ const getIcon = (iconName: string) => {
 <template>
   <div class="blocks-wrapper" v-if="blocks && blocks.length">
     <div v-for="(block, index) in blocks" :key="index">
-      
+      <div
+        class="cms-block-shell"
+        :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === index }"
+        @click="selectEditableBlock(index, $event)"
+      >
+        <div v-if="editMode && user" class="cms-block-label">
+          {{ blockLabel(block) }}
+        </div>
+
       <!-- HERO BLOCK -->
       <section v-if="block.blockType === 'hero'" class="hero-section">
         <div class="hero-bg" :style="{ backgroundImage: `url(${block.backgroundImage?.url || '/sportboot.png'})` }"></div>
@@ -147,12 +179,52 @@ const getIcon = (iconName: string) => {
           </div>
         </div>
       </section>
-
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.cms-block-shell {
+  position: relative;
+}
+
+.cms-block-shell.is-editable {
+  cursor: pointer;
+}
+
+.cms-block-shell.is-editable::after {
+  content: '';
+  position: absolute;
+  inset: 0.4rem;
+  border: 2px dashed rgba(0, 119, 190, 0.18);
+  border-radius: 1.2rem;
+  pointer-events: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cms-block-shell.is-editable:hover::after,
+.cms-block-shell.is-selected::after {
+  border-color: rgba(0, 119, 190, 0.75);
+  background: rgba(0, 235, 255, 0.06);
+}
+
+.cms-block-label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(6, 21, 63, 0.92);
+  color: white;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
 .pegel-section { background: var(--color-bg); }
 .pegel-card { background: white; padding: 2.5rem; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); border-left: 6px solid var(--color-accent); }
 .pegel-info { display: flex; align-items: center; gap: 1.5rem; }
