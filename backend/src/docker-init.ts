@@ -3,10 +3,6 @@ import config from './payload.config'
 import { defaultNavigation, defaultSiteSettings } from './seed-defaults'
 import { seed } from './seed'
 
-// The SQLite adapter only auto-creates schema outside production.
-// We use a dedicated one-off init process before the production servers start.
-process.env.NODE_ENV = 'development'
-
 const dockerInit = async () => {
   const payload = await getPayload({ config })
 

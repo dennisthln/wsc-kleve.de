@@ -1,9 +1,14 @@
 import { spawn, spawnSync } from 'child_process'
 
-const runOrExit = (command: string, args: string[], name: string) => {
+const runOrExit = (
+  command: string,
+  args: string[],
+  name: string,
+  envOverrides: Record<string, string> = {},
+) => {
   const result = spawnSync(command, args, {
     stdio: 'inherit',
-    env: process.env,
+    env: { ...process.env, ...envOverrides },
   })
 
   if (result.status !== 0) {
@@ -12,7 +17,11 @@ const runOrExit = (command: string, args: string[], name: string) => {
   }
 }
 
-runOrExit('bun', ['run', 'backend/src/docker-init.ts'], 'Docker init')
+// The SQLite adapter only auto-creates schema outside production.
+// Run the one-off bootstrap with a development env, then start the real servers in production mode.
+runOrExit('bun', ['run', 'backend/src/docker-init.ts'], 'Docker init', {
+  NODE_ENV: 'development',
+})
 
 spawn('nginx', ['-g', 'daemon off;'], { stdio: 'inherit' })
 spawn('bun', ['run', 'backend/server.js'], {
