@@ -571,8 +571,10 @@ const getIcon = (iconName: string) => {
 .bg-accent { background-color: var(--color-accent); color: var(--color-primary); }
 
 .cta-section { background: var(--color-bg); }
-.cta-card { padding: 5rem; border-radius: var(--radius-lg); text-align: center; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); color: white; }
-.cta-card h2 { color: white; font-size: 3rem; margin-bottom: 1.5rem; }
+.cta-card { padding: 3rem 2rem; border-radius: var(--radius-lg); text-align: center; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); color: white; }
+.cta-card h2 { color: white; font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1.5rem; }
+.cta-card p { font-size: clamp(1rem, 3vw, 1.5rem) }
+.cta-card .btn { margin-top: 1.5rem; }
 
 .info-section { background: var(--color-bg-alt); }
 .info-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; }
