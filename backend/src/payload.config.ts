@@ -1,6 +1,6 @@
 import { de } from '@payloadcms/translations/languages/de'
 import { en } from '@payloadcms/translations/languages/en'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -44,9 +44,11 @@ export default buildConfig({
   i18n: {
     supportedLanguages: { de, en },
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || 'file:./payload.db',
+  db: postgresAdapter({
+    pool: {
+      connectionString:
+        process.env.DATABASE_URI ||
+        'postgresql://payload:payload@127.0.0.1:5432/wsc_kleve',
     },
   }),
   sharp,
