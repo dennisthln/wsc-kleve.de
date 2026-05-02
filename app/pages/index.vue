@@ -1,12 +1,36 @@
 <script setup lang="ts">
-const { data: page, error: pageError } = await useFetch<any>('/api/pages?where[slug][equals]=home')
-const { data: settings, error: settingsError } = await useFetch<any>('/api/globals/site-settings')
+const { data: page } = await useAsyncData('home-page', async () => {
+  try {
+    return await $fetch<any>('/api/pages?where[slug][equals]=home')
+  } catch (error: any) {
+    if (error?.statusCode === 404) {
+      return null
+    }
 
-if (pageError.value || settingsError.value) {
-  console.error('CMS Fetch Error:', pageError.value || settingsError.value)
-}
+    throw error
+  }
+})
+
+const { data: settings } = await useAsyncData('site-settings', async () => {
+  try {
+    return await $fetch<any>('/api/globals/site-settings')
+  } catch (error: any) {
+    if (error?.statusCode === 404) {
+      return null
+    }
+
+    throw error
+  }
+})
 
 const homepage = computed(() => page.value?.docs?.[0])
+
+if (!homepage.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Startseite nicht gefunden',
+  })
+}
 </script>
 
 <template>
@@ -28,16 +52,6 @@ const homepage = computed(() => page.value?.docs?.[0])
     <!-- DYNAMIC NEWS SECTION -->
     <NewsSection />
 
-    <!-- Loading/Error Fallback -->
-    <template v-if="!homepage && !pageError">
-      <section class="hero-fallback">
-        <div class="container text-center">
-          <h1>WSCKL</h1>
-          <p>Inhalte werden geladen...</p>
-        </div>
-      </section>
-    </template>
-
     <!-- Maintenance Banner -->
     <div v-if="settings?.maintenanceMode" class="maintenance-banner glass">
       <div class="container">
@@ -48,12 +62,6 @@ const homepage = computed(() => page.value?.docs?.[0])
 </template>
 
 <style scoped>
-.hero-fallback {
-  padding: 10rem 0;
-  background: var(--color-primary);
-  color: white;
-}
-
 .maintenance-banner {
   position: fixed;
   bottom: 2rem;

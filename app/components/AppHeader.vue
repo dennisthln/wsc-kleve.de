@@ -75,7 +75,7 @@ const closeMenu = () => {
   <header class="header" :class="{ 'header-scrolled': isScrolled || isMenuOpen, 'is-open': isMenuOpen }">
     <div class="container header-content">
       <NuxtLink to="/" class="logo" @click="closeMenu">
-        <img src="/logo.png" alt="WSC Kleve Logo" />
+        <img src="/logo-white.svg" alt="WSC Kleve Logo" />
       </NuxtLink>
 
       <nav class="desktop-nav">
@@ -111,47 +111,47 @@ const closeMenu = () => {
         </button>
       </div>
     </div>
-
-    <!-- Mobile Navigation Overlay -->
-    <Transition name="mobile-menu-fade">
-      <nav v-if="isMenuOpen" class="mobile-nav">
-        <div class="mobile-nav-container container">
-          <ul class="mobile-nav-list">
-            <li v-for="(item, index) in menuItems" :key="item.label" 
-                class="mobile-nav-item" 
-                :style="{ transitionDelay: `${index * 50}ms` }">
-              
-              <template v-if="item.children && item.children.length > 0">
-                <div class="mobile-nav-parent" @click="toggleDropdown(item.label)">
-                  <span>{{ item.label }}</span>
-                  <ChevronDown :size="24" :class="{ rotated: activeDropdown === item.label }" />
-                </div>
-                <Transition name="expand">
-                  <ul v-if="activeDropdown === item.label" class="mobile-sub-list">
-                    <li v-for="child in item.children" :key="child.label">
-                      <NuxtLink :to="child.link" class="mobile-sub-link" @click="closeMenu">
-                        {{ child.label }}
-                      </NuxtLink>
-                    </li>
-                  </ul>
-                </Transition>
-              </template>
-              
-              <NuxtLink v-else :to="item.link" class="mobile-nav-link" @click="closeMenu">
-                {{ item.label }}
-              </NuxtLink>
-            </li>
-          </ul>
-          
-          <div class="mobile-nav-footer">
-            <NuxtLink to="/aufnahmeantrag" class="btn-cta full-width" @click="closeMenu">
-              Jetzt Mitglied werden
-            </NuxtLink>
-          </div>
-        </div>
-      </nav>
-    </Transition>
   </header>
+
+  <!-- Mobile Navigation Overlay - Moved outside header to avoid backdrop-filter clipping -->
+  <Transition name="mobile-menu-fade">
+    <nav v-if="isMenuOpen" class="mobile-nav">
+      <div class="mobile-nav-container container">
+        <ul class="mobile-nav-list">
+          <li v-for="(item, index) in menuItems" :key="item.label" 
+              class="mobile-nav-item" 
+              :style="{ transitionDelay: `${index * 50}ms` }">
+            
+            <template v-if="item.children && item.children.length > 0">
+              <div class="mobile-nav-parent" @click="toggleDropdown(item.label)">
+                <span>{{ item.label }}</span>
+                <ChevronDown :size="24" :class="{ rotated: activeDropdown === item.label }" />
+              </div>
+              <Transition name="expand">
+                <ul v-if="activeDropdown === item.label" class="mobile-sub-list">
+                  <li v-for="child in item.children" :key="child.label">
+                    <NuxtLink :to="child.link" class="mobile-sub-link" @click="closeMenu">
+                      {{ child.label }}
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </Transition>
+            </template>
+            
+            <NuxtLink v-else :to="item.link" class="mobile-nav-link" @click="closeMenu">
+              {{ item.label }}
+            </NuxtLink>
+          </li>
+        </ul>
+        
+        <div class="mobile-nav-footer">
+          <NuxtLink to="/aufnahmeantrag" class="btn-cta full-width" @click="closeMenu">
+            Jetzt Mitglied werden
+          </NuxtLink>
+        </div>
+      </div>
+    </nav>
+  </Transition>
 </template>
 
 <style scoped>
@@ -161,7 +161,7 @@ const closeMenu = () => {
   left: 0;
   right: 0;
   height: var(--header-height);
-  z-index: 1000;
+  z-index: 2000; /* Increased to stay above mobile nav */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   color: white;
   display: flex;
@@ -174,6 +174,7 @@ const closeMenu = () => {
   height: 70px;
   background: rgba(10, 36, 114, 0.98);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
