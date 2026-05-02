@@ -13,19 +13,11 @@ const fetchCmsPageBySlug = async (slug: string) => {
 }
 
 export const loadCmsPage = async (slug: string) => {
-  const { cmsUrl } = useCmsApi()
   const normalizedSlug = slug === '/' ? '/' : slug.replace(/\/+$/, '')
-  if (normalizedSlug === '/') {
-    const pages = await $fetch<CmsPageResult>(cmsUrl('/pages'), {
-      query: {
-        limit: 100,
-      },
-    })
-
-    return pages.docs?.find((page) => page.slug === '/' || page.slug === 'home') ?? null
-  }
-
-  const candidates = [normalizedSlug, normalizedSlug.replace(/^\//, '')]
+  const candidates =
+    normalizedSlug === '/'
+      ? ['/', 'home']
+      : [normalizedSlug, normalizedSlug.replace(/^\//, '')]
 
   for (const candidate of candidates) {
     const page = await fetchCmsPageBySlug(candidate)
