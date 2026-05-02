@@ -5,13 +5,12 @@ FROM oven/bun:1 AS base
 WORKDIR /app
 COPY . .
 
-# --- BUILD BACKEND ---
-WORKDIR /app/backend
+# --- BUILD FRONTEND (Nuxt is in root) ---
 RUN bun install --frozen-lockfile
 RUN bun run build
 
-# --- BUILD FRONTEND ---
-WORKDIR /app/app
+# --- BUILD BACKEND ---
+WORKDIR /app/backend
 RUN bun install --frozen-lockfile
 RUN bun run build
 
@@ -20,13 +19,13 @@ FROM oven/bun:1 AS runner
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
-# Copy Backend
+# Copy Backend (from backend/.next/standalone)
 COPY --from=base /app/backend/.next/standalone ./backend
 COPY --from=base /app/backend/.next/static ./backend/.next/static
-COPY --from=base /app/backend/public ./backend/public
+COPY --from=base /app/public ./backend/public
 
-# Copy Frontend
-COPY --from=base /app/app/.output ./app/.output
+# Copy Frontend (from root .output)
+COPY --from=base /app/.output ./app/.output
 
 # Copy Nginx Config
 COPY nginx.conf /etc/nginx/sites-available/default
