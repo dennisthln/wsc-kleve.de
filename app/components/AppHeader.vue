@@ -101,11 +101,8 @@ const closeMenu = () => {
       <div class="mobile-nav-inner container">
         <div class="mobile-nav-content">
           <ul class="mobile-nav-links">
-            <li v-for="(item, index) in menuItems" :key="item.label" 
-                class="mobile-nav-li" 
-                :style="{ transitionDelay: `${index * 80 + 150}ms` }">
+            <li v-for="(item, index) in menuItems" :key="item.label" class="mobile-nav-li">
               <NuxtLink :to="item.link" class="mobile-nav-a" @click="closeMenu">
-                <span class="nav-number">0{{ index + 1 }}</span>
                 <span class="nav-label">{{ item.label }}</span>
                 <div class="active-line"></div>
               </NuxtLink>
@@ -113,7 +110,7 @@ const closeMenu = () => {
           </ul>
         </div>
         
-        <div class="mobile-nav-bottom" :style="{ transitionDelay: `${menuItems.length * 80 + 250}ms` }">
+        <div class="mobile-nav-bottom">
           <NuxtLink to="/aufnahmeantrag" class="btn-membership" @click="closeMenu">
             Mitglied werden
             <div class="btn-glow"></div>
@@ -228,7 +225,7 @@ const closeMenu = () => {
   color: white;
   cursor: pointer;
   padding: 0.5rem;
-  z-index: 2000;
+  z-index: 2100; /* Ensure toggle is above mobile nav */
   transition: transform 0.3s ease;
 }
 
@@ -277,7 +274,7 @@ const closeMenu = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-top: 140px;
+  padding-top: 100px;
   padding-bottom: 40px;
   position: relative;
   z-index: 10;
@@ -302,15 +299,8 @@ const closeMenu = () => {
 }
 
 .mobile-nav-li {
-  margin-bottom: 1.5rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.mobile-menu-enter-active .mobile-nav-li {
-  opacity: 1;
-  transform: translateY(0);
+  margin-bottom: 1rem;
+  transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .mobile-nav-a {
@@ -320,19 +310,19 @@ const closeMenu = () => {
   color: white;
   text-decoration: none;
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.8rem 0;
 }
 
 .nav-number {
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--color-accent);
   opacity: 0.6;
 }
 
 .nav-label {
-  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  font-size: clamp(2rem, 7vw, 3rem);
   font-weight: 800;
   letter-spacing: -1px;
   transition: color 0.3s ease;
@@ -357,26 +347,19 @@ const closeMenu = () => {
 }
 
 .mobile-nav-bottom {
-  margin-top: 3rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.mobile-menu-enter-active .mobile-nav-bottom {
-  opacity: 1;
-  transform: translateY(0);
+  margin-top: 2rem;
+  transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .btn-membership {
   display: block;
   width: 100%;
-  padding: 1.5rem;
+  padding: 1.25rem;
   background: white;
   color: var(--color-primary);
-  border-radius: 16px;
+  border-radius: 12px;
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -402,7 +385,7 @@ const closeMenu = () => {
 
 .nautical-coord {
   font-family: monospace;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   opacity: 0.4;
   letter-spacing: 2px;
 }
@@ -412,17 +395,33 @@ const closeMenu = () => {
   .mobile-toggle { display: block; }
 }
 
-/* Transitions */
+/* Simplified stable transitions */
 .mobile-menu-enter-active, .mobile-menu-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 .mobile-menu-enter-from, .mobile-menu-leave-to {
   opacity: 0;
 }
 
-.mobile-menu-leave-to .mobile-nav-li {
-  transform: translateY(-20px);
-  opacity: 0;
+.mobile-menu-enter-active .mobile-nav-li {
+  animation: slideInUp 0.5s cubic-bezier(0.2, 1, 0.3, 1) both;
+}
+
+.mobile-menu-enter-active .mobile-nav-li:nth-child(1) { animation-delay: 0.1s; }
+.mobile-menu-enter-active .mobile-nav-li:nth-child(2) { animation-delay: 0.15s; }
+.mobile-menu-enter-active .mobile-nav-li:nth-child(3) { animation-delay: 0.2s; }
+.mobile-menu-enter-active .mobile-nav-li:nth-child(4) { animation-delay: 0.25s; }
+.mobile-menu-enter-active .mobile-nav-li:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
