@@ -1,18 +1,35 @@
 version: '3.7'
 
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-wsc_kleve}
+      - POSTGRES_USER=${POSTGRES_USER:-payload}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-payload}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-payload} -d ${POSTGRES_DB:-wsc_kleve}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: always
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "49117:8080"  # Unified Entry Point (Nuxt + Payload)
     environment:
-      - DATABASE_URI=file:/data/payload.db
+      - DATABASE_URI=postgresql://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD:-payload}@db:5432/${POSTGRES_DB:-wsc_kleve}
       - PAYLOAD_SECRET=${PAYLOAD_SECRET:-development_secret}
       - NUXT_PUBLIC_API_BASE=/api
     volumes:
-      - ./backend/data:/data
       - ./backend/media:/app/backend/media
     restart: always
     deploy:
@@ -23,3 +40,6 @@ services:
         reservations:
           cpus: '0.5'    # Mindestens 0.5 CPU (Reserve)
           memory: 512M    # Mindestens 512 MB RAM (Reserve)
+
+volumes:
+  postgres_data:

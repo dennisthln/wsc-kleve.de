@@ -17,7 +17,7 @@ const runOrExit = (
   }
 }
 
-// The SQLite adapter only auto-creates schema outside production.
+// Payload manages schema changes automatically outside production.
 // Run the one-off bootstrap with a development env, then start the real servers in production mode.
 runOrExit('bun', ['run', 'backend/src/docker-init.ts'], 'Docker init', {
   NODE_ENV: 'development',
