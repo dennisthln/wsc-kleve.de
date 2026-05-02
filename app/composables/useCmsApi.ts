@@ -1,22 +1,14 @@
 export const useCmsApi = () => {
   const config = useRuntimeConfig()
   const publicBase = config.public.apiBase.replace(/\/+$/, '')
+  const internalBase = (config.apiBaseInternal || publicBase).replace(/\/+$/, '')
 
   let apiBase = publicBase
 
   if (import.meta.dev) {
     apiBase = 'http://localhost:3000/api'
   } else if (import.meta.server) {
-    const explicitInternalBase = process.env.NUXT_API_BASE_INTERNAL?.replace(/\/+$/, '')
-
-    if (explicitInternalBase) {
-      apiBase = explicitInternalBase
-    } else if (/^https?:\/\//.test(publicBase)) {
-      apiBase = publicBase
-    } else {
-      const requestUrl = useRequestURL()
-      apiBase = `${requestUrl.origin}${publicBase.startsWith('/') ? publicBase : `/${publicBase}`}`
-    }
+    apiBase = internalBase
   }
 
   const cmsUrl = (path: string) => {
