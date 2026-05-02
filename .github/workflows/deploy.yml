@@ -23,7 +23,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H wsc-kleve.de >> ~/.ssh/known_hosts
+          ssh-keyscan -H kleverweb.de >> ~/.ssh/known_hosts
 
       - name: Sync files to server
         run: |
@@ -38,11 +38,11 @@ jobs:
             --exclude='backend/payload.db' \
             --exclude='backend/media' \
             ./ \
-            root@wsc-kleve.de:/var/www/vhosts/wsc-kleve.de/
+            root@kleverweb.de:/var/www/vhosts/wsc-kleve.de/
 
       - name: Deploy Unified Container
         run: |
-          ssh root@wsc-kleve.de << 'EOF'
+          ssh root@kleverweb.de << 'EOF'
             cd /var/www/vhosts/wsc-kleve.de/
             docker-compose -p wsckleve up -d --build app
           EOF
