@@ -511,19 +511,20 @@ const getIcon = (iconName: string) => {
 .hero-container { position: relative; z-index: 10; text-align: center; width: 100%; }
 .hero-section.is-beautiful .hero-container { max-width: 800px; }
 .hero-title { 
-  font-size: clamp(2.2rem, 8vw, 6rem); 
-  line-height: 1.1; 
-  margin-bottom: 1.5rem; 
+  font-size: clamp(3rem, 5vw, 6rem);
+  line-height: 1.1;
   color: white; 
   word-wrap: break-word; 
   overflow-wrap: break-word; 
-  hyphens: auto; 
+  hyphens: auto;
+  max-width: 1020px;
+  margin: 0 auto 1.5rem;
 }
 .hero-section.is-beautiful .hero-title { 
   font-size: clamp(2rem, 6vw, 5rem); 
   text-shadow: 0 4px 20px rgba(0,0,0,0.3); 
 }
-.hero-subtitle { font-size: clamp(1.2rem, 2vw, 1.8rem); max-width: 800px; margin: 0 auto; opacity: 0.9; }
+.hero-subtitle { font-size: clamp(1.2rem, 2vw, 1.8rem); max-width: 900px; margin: 0 auto; opacity: 0.9; }
 .hero-section.is-beautiful .hero-subtitle { font-size: clamp(1.1rem, 2vw, 1.4rem); text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
 /* Vorstand Styles */
