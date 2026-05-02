@@ -8,6 +8,7 @@ on:
       - "app/**"
       - "backend/**"
       - "docker-compose.yml"
+      - "bun.lockb"
       - ".github/workflows/**"
 
 jobs:

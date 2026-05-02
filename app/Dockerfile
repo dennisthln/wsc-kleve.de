@@ -1,18 +1,18 @@
-# Dockerfile für Nuxt (Frontend)
-FROM node:22-alpine AS base
+# Dockerfile für Nuxt (Frontend) mit Bun
+FROM oven/bun:1 AS base
 
 # Install dependencies
 FROM base AS deps
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json bun.lockb* ./
+RUN bun install --frozen-lockfile
 
 # Build the app
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN bun run build
 
 # Production image
 FROM base AS runner
@@ -26,4 +26,4 @@ COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
 
-CMD ["node", ".output/server/index.mjs"]
+CMD ["bun", "run", ".output/server/index.mjs"]
