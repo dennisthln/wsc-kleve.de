@@ -41,7 +41,7 @@ const getWeatherLabel = (code: number) => {
     </div>
 
     <div v-else class="weather-visual-group">
-      <div class="weather-status-badge">
+      <div class="status-badge">
         {{ getWeatherLabel(weather.weather_code) }}
       </div>
 
@@ -80,17 +80,17 @@ const getWeatherLabel = (code: number) => {
   width: 100%;
 }
 
-.weather-status-badge {
+.status-badge {
   display: inline-block;
-  padding: 0.4rem 1.2rem;
+  padding: 0.3rem 1rem;
   border-radius: 100px;
   background: var(--color-secondary);
   color: white;
   font-weight: 800;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -98,7 +98,7 @@ const getWeatherLabel = (code: number) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .weather-main {
@@ -109,20 +109,21 @@ const getWeatherLabel = (code: number) => {
 
 .value {
   font-family: var(--font-heading);
-  font-size: 4.5rem;
+  font-size: 2.8rem;
   font-weight: 800;
   line-height: 1;
   color: var(--color-primary);
 }
 
 .unit {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text-muted);
 }
 
 .weather-meta {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-text-muted);
 }
@@ -133,16 +134,16 @@ const getWeatherLabel = (code: number) => {
 
 .weather-details-grid {
   display: flex;
-  gap: 1.5rem;
-  padding-top: 1rem;
+  gap: 1.25rem;
+  padding-top: 0.75rem;
   border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: 0.4rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-text-muted);
 }

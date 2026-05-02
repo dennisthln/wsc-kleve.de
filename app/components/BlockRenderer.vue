@@ -488,15 +488,15 @@ const getIcon = (iconName: string) => {
   pointer-events: none;
 }
 
-.pegel-section { background: var(--color-bg); }
-.pegel-weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-.pegel-card { background: white; padding: 2.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-md); border-left: 6px solid var(--color-accent); }
+.pegel-section { background: var(--color-bg); padding: 4rem 0 !important; }
+.pegel-weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.pegel-card { background: white; padding: 1.5rem 2rem; border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; box-shadow: var(--shadow-sm); border-left: 4px solid var(--color-accent); }
 .weather-card { border-left-color: var(--color-secondary); }
-.pegel-info { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
-.pegel-icon { color: var(--color-accent); width: 40px; height: 40px; flex-shrink: 0; }
+.pegel-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.pegel-icon { color: var(--color-accent); width: 32px; height: 32px; flex-shrink: 0; }
 .weather-icon { color: var(--color-secondary); }
-.pegel-info h3 { margin-bottom: 0.25rem; font-size: 1.4rem; }
-.pegel-info p { color: var(--color-text-muted); font-size: 0.9rem; }
+.pegel-info h3 { margin-bottom: 0; font-size: 1.1rem; font-weight: 700; }
+.pegel-info p { color: var(--color-text-muted); font-size: 0.8rem; margin: 0; }
 
 .hero-section { position: relative; height: 90vh; display: flex; align-items: center; overflow: hidden; color: white; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 .hero-section.is-beautiful { height: 70vh; min-height: 600px; margin-bottom: -100px; text-align: center; }

@@ -48,11 +48,11 @@ const formatDate = (dateStr: string) => {
     </div>
 
     <div v-else class="pegel-visual-group">
+      <div class="status-badge" :style="{ backgroundColor: getStatusColor(pegel.stateMnwMhw) }">
+        {{ getStatusLabel(pegel.stateMnwMhw) }}
+      </div>
       <div class="pegel-main-row">
         <div class="pegel-value-group">
-          <div class="pegel-status-label" :style="{ color: getStatusColor(pegel.stateMnwMhw) }">
-            {{ getStatusLabel(pegel.stateMnwMhw) }}
-          </div>
           <div class="pegel-main">
             <span class="value">{{ pegel.value }}</span>
             <span class="unit">cm</span>
@@ -76,12 +76,17 @@ const formatDate = (dateStr: string) => {
   width: 100%;
 }
 
-.pegel-status-label {
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 100px;
+  color: white;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .pegel-main-row {
@@ -93,31 +98,32 @@ const formatDate = (dateStr: string) => {
 .pegel-main {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .value {
   font-family: var(--font-heading);
-  font-size: 4.5rem;
+  font-size: 2.8rem;
   font-weight: 800;
   line-height: 1;
   color: var(--color-primary);
 }
 
 .unit {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text-muted);
 }
 
 .pegel-meta {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   font-weight: 700;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
 }
 
 .pegel-trend-indicator {
-  padding: 1rem;
+  padding: 0.5rem;
   opacity: 0.5;
 }
 
