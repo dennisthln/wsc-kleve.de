@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: settings } = await useFetch('http://localhost:3000/api/globals/site-settings')
+const { data: settings } = await useFetch('/api/globals/site-settings')
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const { data: settings } = await useFetch('http://localhost:3000/api/globals/sit
       </div>
 
       <div class="actions">
-        <a href="http://localhost:3000/admin" target="_blank" class="btn btn-primary">
+        <a href="/admin" target="_blank" class="btn btn-primary">
           Zum Admin Panel (Inhalte bearbeiten)
         </a>
         <NuxtLink to="/" class="btn btn-outline">Zurück zur Webseite</NuxtLink>

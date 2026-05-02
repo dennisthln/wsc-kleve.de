@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: pageData } = await useFetch('http://localhost:3000/api/pages?where[slug][equals]=impressum')
+const { data: pageData } = await useFetch('/api/pages?where[slug][equals]=impressum')
 const page = computed(() => pageData.value?.docs?.[0])
 </script>
 

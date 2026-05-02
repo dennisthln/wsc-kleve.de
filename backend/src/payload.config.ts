@@ -25,8 +25,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  cors: ['http://localhost:3001'],
-  csrf: ['http://localhost:3001'],
+  cors: ['http://localhost:3001', 'https://wsc-kleve.kleverweb.de'],
+  csrf: ['http://localhost:3001', 'https://wsc-kleve.kleverweb.de'],
   collections: [Users, Media, News, Events, Pages],
   globals: [SiteSettings, Navigation],
   routes: {

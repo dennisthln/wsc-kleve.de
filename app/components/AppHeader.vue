@@ -7,7 +7,7 @@ const activeDropdown = ref<string | null>(null)
 const isScrolled = ref(false)
 
 // Fetch Navigation from CMS (Client only for stability)
-const { data: navData } = await useFetch('http://localhost:3000/api/globals/navigation', {
+const { data: navData } = await useFetch('/api/globals/navigation', {
   server: false,
   lazy: true
 })

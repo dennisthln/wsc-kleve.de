@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { data: page, error: pageError } = await useFetch<any>('http://localhost:3000/api/pages?where[slug][equals]=home')
-const { data: settings, error: settingsError } = await useFetch<any>('http://localhost:3000/api/globals/site-settings')
+const { data: page, error: pageError } = await useFetch<any>('/api/pages?where[slug][equals]=home')
+const { data: settings, error: settingsError } = await useFetch<any>('/api/globals/site-settings')
 
 if (pageError.value || settingsError.value) {
   console.error('CMS Fetch Error:', pageError.value || settingsError.value)
