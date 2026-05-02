@@ -35,7 +35,8 @@ const blockLabel = (block: any) => {
     board: 'Vorstand-Liste',
     events: 'Termine',
     news: 'Neuigkeiten',
-    contact: 'Kontaktformular'
+    contact: 'Kontaktformular',
+    sponsors: 'Sponsoren'
   }
   return labels[block.blockType] || block.blockType
 }
@@ -413,6 +414,35 @@ const getIcon = (iconName: string) => {
         </div>
       </section>
 
+      <!-- SPONSORS BLOCK -->
+      <section v-else-if="block.blockType === 'sponsors'" class="sponsors-section section">
+        <div class="container">
+          <header class="section-header text-center" v-animate-on-scroll>
+            <CmsEditableText
+              tag="h2"
+              class="section-title"
+              :block-index="resolveBlockIndex(index)"
+              :path="['heading']"
+              :value="block.heading || 'Unsere Partner & Sponsoren'"
+            />
+          </header>
+          <div class="sponsors-grid" v-if="block.sponsors">
+            <component 
+              :is="sponsor.link ? 'a' : 'div'"
+              v-for="(sponsor, sIdx) in block.sponsors" :key="sIdx"
+              :href="sponsor.link || undefined"
+              target="_blank"
+              class="sponsor-item"
+              :class="{ 'is-link': sponsor.link }"
+              v-animate-on-scroll="{ delay: sIdx * 50 }"
+            >
+              <img v-if="sponsor.logo" :src="sponsor.logo.url" :alt="sponsor.name" class="sponsor-logo" />
+              <span v-else class="sponsor-name-fallback">{{ sponsor.name }}</span>
+            </component>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 </template>
@@ -476,8 +506,19 @@ const getIcon = (iconName: string) => {
 .hero-section.is-beautiful .hero-overlay { background: linear-gradient(135deg, rgba(10, 36, 114, 0.85) 0%, rgba(0, 119, 190, 0.65) 100%); }
 .hero-container { position: relative; z-index: 10; text-align: center; width: 100%; }
 .hero-section.is-beautiful .hero-container { max-width: 800px; }
-.hero-title { font-size: clamp(3rem, 8vw, 6rem); line-height: 1; margin-bottom: 1.5rem; color: white; }
-.hero-section.is-beautiful .hero-title { font-size: clamp(3rem, 6vw, 5rem); text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.hero-title { 
+  font-size: clamp(2.2rem, 8vw, 6rem); 
+  line-height: 1.1; 
+  margin-bottom: 1.5rem; 
+  color: white; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  hyphens: auto; 
+}
+.hero-section.is-beautiful .hero-title { 
+  font-size: clamp(2rem, 6vw, 5rem); 
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3); 
+}
 .hero-subtitle { font-size: clamp(1.2rem, 2vw, 1.8rem); max-width: 800px; margin: 0 auto; opacity: 0.9; }
 .hero-section.is-beautiful .hero-subtitle { font-size: clamp(1.1rem, 2vw, 1.4rem); text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
@@ -546,6 +587,14 @@ const getIcon = (iconName: string) => {
 .contact-section { background: white; }
 .max-w-2xl { max-width: 42rem; }
 .mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Sponsors Styles */
+.sponsors-section { background: var(--color-bg-alt); padding: 6rem 0; }
+.sponsors-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4rem; margin-top: 4rem; }
+.sponsor-item { display: block; max-width: 200px; transition: all 0.3s ease; filter: grayscale(1); opacity: 0.6; }
+.sponsor-item:hover { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
+.sponsor-logo { width: 100%; height: auto; object-fit: contain; max-height: 80px; }
+.sponsor-name-fallback { font-weight: 700; font-size: 1.2rem; color: var(--color-primary); }
 
 @media (max-width: 992px) {
   .pegel-weather-grid { grid-template-columns: 1fr; gap: 2rem; }

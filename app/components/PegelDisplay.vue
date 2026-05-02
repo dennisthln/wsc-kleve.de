@@ -1,42 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { TrendingUp, TrendingDown } from 'lucide-vue-next'
 
-const props = defineProps<{
-  station: string
-}>()
-
-const pegel = ref<any>(null)
-const pending = ref(true)
-const error = ref(false)
-
-const loadPegelData = async () => {
-  pending.value = true
-  error.value = false
-  
-  try {
-    const stationName = props.station.toUpperCase()
-    const response = await fetch(`https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/${stationName}/W/currentmeasurement.json`)
-    
-    if (!response.ok) throw new Error('API Response not ok')
-    
-    const data = await response.json()
-    if (data && typeof data.value !== 'undefined') {
-      pegel.value = data
-    } else {
-      throw new Error('No data value found')
-    }
-  } catch (e) {
-    console.error('Pegel API Error:', e)
-    error.value = true
-  } finally {
-    pending.value = false
-  }
-}
-
-onMounted(() => {
-  loadPegelData()
-})
+const { data: nauticalData, pending, error } = await useFetch<any>('/api/nautical-data')
+const pegel = computed(() => nauticalData.value?.pegel)
 
 const getStatusLabel = (state: string) => {
   switch (state) {
@@ -72,14 +38,13 @@ const formatDate = (dateStr: string) => {
   <div class="pegel-display-wrapper">
     <div v-if="pending" class="loading-state">
       <div class="pulse-loader"></div>
-      <span>Lade Live-Daten...</span>
+      <span>Lade Pegeldaten...</span>
     </div>
 
     <div v-else-if="error || !pegel" class="error-state">
       <div class="error-content">
         <span>⚠️ Pegel nicht abrufbar</span>
       </div>
-      <button @click="loadPegelData" class="retry-btn">Neu laden</button>
     </div>
 
     <div v-else class="pegel-visual-group">

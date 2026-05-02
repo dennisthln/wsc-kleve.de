@@ -343,8 +343,27 @@ export interface Page {
             blockName?: string | null;
             blockType: 'news';
           }
+        | {
+            heading?: string | null;
+            sponsors?:
+              | {
+                  name: string;
+                  logo: number | Media;
+                  link?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sponsors';
+          }
       )[]
     | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -647,6 +666,28 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        sponsors?:
+          | T
+          | {
+              heading?: T;
+              sponsors?:
+                | T
+                | {
+                    name?: T;
+                    logo?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
       };
   updatedAt?: T;
   createdAt?: T;

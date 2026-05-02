@@ -145,3 +145,20 @@ export const NewsBlock: Block = {
     { name: 'limit', type: 'number', defaultValue: 3, label: 'Anzahl News' },
   ]
 }
+
+export const SponsorsBlock: Block = {
+  slug: 'sponsors',
+  labels: { singular: 'Sponsoren-Sektion', plural: 'Sponsoren-Sektionen' },
+  fields: [
+    { name: 'heading', type: 'text', defaultValue: 'Unsere Partner & Sponsoren' },
+    {
+      name: 'sponsors',
+      type: 'array',
+      fields: [
+        { name: 'name', type: 'text', required: true },
+        { name: 'logo', type: 'upload', relationTo: 'media', required: true },
+        { name: 'link', type: 'text', label: 'Website (URL)' }
+      ]
+    }
+  ]
+}

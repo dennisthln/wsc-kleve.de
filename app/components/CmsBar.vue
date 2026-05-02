@@ -129,8 +129,10 @@ watch(
   right: 1rem;
   z-index: 2600;
   display: flex;
+  flex-direction: row-reverse; /* Button on right, panel expands to left */
   align-items: flex-start;
   gap: 0.75rem;
+  pointer-events: none; /* Allow clicking through the container */
 }
 
 .cms-toggle {
@@ -139,22 +141,24 @@ watch(
   gap: 0.5rem;
   border: 0;
   border-radius: 999px;
-  padding: 0.8rem 1rem;
+  padding: 0.8rem 1.25rem;
   background: linear-gradient(135deg, #06153f, #0a2472);
   color: white;
   font: inherit;
   font-weight: 700;
   box-shadow: 0 12px 30px rgba(10, 36, 114, 0.28);
   cursor: pointer;
+  pointer-events: auto; /* Re-enable pointer events for the button */
+  flex-shrink: 0;
 }
 
 .cms-panel {
   width: min(24rem, calc(100vw - 2rem));
   padding: 1rem;
   border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
-  transform: translateX(calc(100% + 1rem));
+  transform: translateX(20px);
   opacity: 0;
   pointer-events: none;
   transition: transform 0.25s ease, opacity 0.25s ease;
@@ -163,7 +167,7 @@ watch(
 .cms-shell.is-open .cms-panel {
   transform: translateX(0);
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto; /* Re-enable pointer events when open */
 }
 
 .cms-head {
@@ -304,11 +308,13 @@ watch(
   }
 
   .cms-panel {
-    transform: translateY(calc(100% + 1rem));
+    transform: translateY(20px);
+    pointer-events: none;
   }
 
   .cms-shell.is-open .cms-panel {
     transform: translateY(0);
+    pointer-events: auto;
   }
 }
 </style>

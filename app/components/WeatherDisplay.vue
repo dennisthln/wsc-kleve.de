@@ -1,38 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Cloud, Sun, CloudRain, CloudLightning, CloudSnow, Wind, Droplets, Thermometer } from 'lucide-vue-next'
+import { Cloud, Sun, CloudRain, CloudLightning, CloudSnow, Wind, Droplets } from 'lucide-vue-next'
 
-const weather = ref<any>(null)
-const pending = ref(true)
-const error = ref(false)
-
-const loadWeatherData = async () => {
-  pending.value = true
-  error.value = false
-  
-  try {
-    // Kleve Coordinates: 51.78, 6.13
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=51.78&longitude=6.13&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&timezone=Europe%2FBerlin`)
-    
-    if (!response.ok) throw new Error('Weather API Response not ok')
-    
-    const data = await response.json()
-    if (data && data.current) {
-      weather.value = data.current
-    } else {
-      throw new Error('No weather data found')
-    }
-  } catch (e) {
-    console.error('Weather API Error:', e)
-    error.value = true
-  } finally {
-    pending.value = false
-  }
-}
-
-onMounted(() => {
-  loadWeatherData()
-})
+const { data: nauticalData, pending, error } = await useFetch<any>('/api/nautical-data')
+const weather = computed(() => nauticalData.value?.weather)
 
 const getWeatherIcon = (code: number) => {
   // WMO Weather interpretation codes (WW)

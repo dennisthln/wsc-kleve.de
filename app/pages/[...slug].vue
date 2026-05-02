@@ -27,6 +27,24 @@ const { data: page, error: asyncError, pending } = await useAsyncData(
   () => loadCmsPage(slugPath.value),
 )
 
+// Provide SEO meta data
+watchEffect(() => {
+  if (page.value) {
+    const title = page.value.seo?.metaTitle || page.value.title
+    const description = page.value.seo?.metaDescription || 'Wassersport am Niederrhein - Segeln, Motorboot und Gemeinschaft beim WSC Kleve.'
+    const image = page.value.seo?.ogImage?.url
+
+    useSeoMeta({
+      title: `${title} | WSCKL - Wassersportclub Kleve e.V.`,
+      ogTitle: title,
+      description: description,
+      ogDescription: description,
+      ogImage: image,
+      twitterCard: 'summary_large_image',
+    })
+  }
+})
+
 if (import.meta.server) {
   if (asyncError.value) {
     console.error(`[[...slug].vue] useAsyncData error for "${slugPath.value}":`, asyncError.value.message || asyncError.value)
