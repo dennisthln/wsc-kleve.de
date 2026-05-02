@@ -2,21 +2,14 @@ export const useCmsApi = () => {
   const config = useRuntimeConfig()
   const publicBase = config.public.apiBase.replace(/\/+$/, '')
   
-  // Use internal base if provided, otherwise use public base
-  // We check if apiBaseInternal was specifically set or if we should use publicBase
   let apiBase = publicBase
 
   if (import.meta.dev) {
     apiBase = 'http://localhost:3000/api'
   } else if (import.meta.server) {
-    if (config.apiBaseInternal && config.apiBaseInternal !== publicBase) {
-      apiBase = config.apiBaseInternal.replace(/\/+$/, '')
-    } else if (publicBase.startsWith('http')) {
-      apiBase = publicBase
-    } else {
-      // If publicBase is relative (e.g. /api), we need an absolute URL on server
-      // Default to the internal port 3000 where Payload is running
-      apiBase = 'http://localhost:3000/api'
+    // Standardize to public URL if absolute, otherwise fallback to internal port 3000
+    if (!publicBase.startsWith('http')) {
+      apiBase = 'https://wsc-kleve.kleverweb.de/api'
     }
   }
 

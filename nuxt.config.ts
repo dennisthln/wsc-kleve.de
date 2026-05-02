@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiBaseInternal: process.env.NUXT_API_BASE_INTERNAL,
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || (process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '/api')
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || (process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://wsc-kleve.kleverweb.de/api')
     }
   }
 })
