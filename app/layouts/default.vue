@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import CmsInlineEditor from '../components/CmsInlineEditor.vue'
+</script>
+
 <template>
   <div class="app-layout">
     <CmsBar />

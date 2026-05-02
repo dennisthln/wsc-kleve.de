@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { HeroBlock, ContentBlock, InfoBlock, FeaturesBlock, ImageGridBlock, CTABlock, PegelBlock, PersonBlock } from '../blocks/Sections'
+import { HeroBlock, ContentBlock, InfoBlock, FeaturesBlock, ImageGridBlock, CTABlock, PegelBlock, PersonBlock, BoardBlock } from '../blocks/Sections'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -39,6 +39,7 @@ export const Pages: CollectionConfig = {
         InfoBlock,
         PegelBlock,
         PersonBlock,
+        BoardBlock,
       ],
     },
   ],

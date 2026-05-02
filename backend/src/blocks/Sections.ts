@@ -6,7 +6,25 @@ export const HeroBlock: Block = {
     { name: 'title', type: 'text', required: true },
     { name: 'subtitle', type: 'text' },
     { name: 'backgroundImage', type: 'upload', relationTo: 'media' },
+    { 
+      name: 'variant', 
+      type: 'select', 
+      options: [
+        { label: 'Standard', value: 'standard' },
+        { label: 'Beautiful (Overlapping)', value: 'beautiful' }
+      ],
+      defaultValue: 'standard'
+    },
   ],
+}
+
+export const BoardBlock: Block = {
+  slug: 'board',
+  labels: { singular: 'Vorstand-Liste', plural: 'Vorstand-Listen' },
+  fields: [
+    { name: 'heading', type: 'text', defaultValue: 'Unser Vorstand' },
+    { name: 'subheading', type: 'text' },
+  ]
 }
 
 export const FeaturesBlock: Block = {
@@ -16,6 +34,15 @@ export const FeaturesBlock: Block = {
     { name: 'heading', type: 'text' },
     { name: 'subheading', type: 'text' },
     {
+      name: 'variant',
+      type: 'select',
+      options: [
+        { label: 'Standard Grid', value: 'standard' },
+        { label: 'Beautiful Overlap', value: 'overlap' }
+      ],
+      defaultValue: 'standard'
+    },
+    {
       name: 'features',
       type: 'array',
       minRows: 1,
@@ -23,6 +50,7 @@ export const FeaturesBlock: Block = {
       fields: [
         { name: 'title', type: 'text', required: true },
         { name: 'description', type: 'textarea' },
+        { name: 'link', type: 'text', label: 'Verlinkung (optional)' },
         { name: 'icon', type: 'select', options: [
           { label: 'Sailing', value: 'sailing' },
           { label: 'Anchor', value: 'anchor' },

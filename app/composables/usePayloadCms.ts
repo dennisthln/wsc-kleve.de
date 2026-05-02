@@ -14,6 +14,20 @@ type CmsPageDoc = {
 
 const clonePage = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 
+const setDeepValue = (target: Record<string, any> | any[], path: Array<string | number>, value: any) => {
+  let current: any = target
+
+  for (let index = 0; index < path.length - 1; index += 1) {
+    const key = path[index]
+    if (current[key] === undefined || current[key] === null) {
+      current[key] = typeof path[index + 1] === 'number' ? [] : {}
+    }
+    current = current[key]
+  }
+
+  current[path[path.length - 1]] = value
+}
+
 export const usePayloadCms = () => {
   const route = useRoute()
   const { apiBase, cmsFetch } = useCmsApi()
@@ -175,6 +189,17 @@ export const usePayloadCms = () => {
     })
   }
 
+  const updateBlockValue = (blockIndex: number, path: Array<string | number>, value: any) => {
+    updateDraftPage((page) => {
+      const block = page.layout?.[blockIndex]
+      if (!block) {
+        return
+      }
+
+      setDeepValue(block, path, value)
+    })
+  }
+
   const saveDraft = async () => {
     if (!draftPage.value?.id) {
       return
@@ -236,6 +261,7 @@ export const usePayloadCms = () => {
     settingsAdminUrl,
     syncPage,
     updateSelectedBlockArrayField,
+    updateBlockValue,
     updateSelectedBlockField,
     updateSelectedBlockRichTextNode,
     user,

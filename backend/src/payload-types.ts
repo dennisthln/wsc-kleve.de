@@ -72,6 +72,7 @@ export interface Config {
     news: News;
     events: Event;
     pages: Page;
+    'board-members': BoardMember;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     news: NewsSelect<false> | NewsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'board-members': BoardMembersSelect<false> | BoardMembersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -228,6 +230,7 @@ export interface Page {
             title: string;
             subtitle?: string | null;
             backgroundImage?: (number | null) | Media;
+            variant?: ('standard' | 'beautiful') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
@@ -257,10 +260,12 @@ export interface Page {
         | {
             heading?: string | null;
             subheading?: string | null;
+            variant?: ('standard' | 'overlap') | null;
             features?:
               | {
                   title: string;
                   description?: string | null;
+                  link?: string | null;
                   icon?: ('sailing' | 'anchor' | 'waves' | 'users') | null;
                   id?: string | null;
                 }[]
@@ -319,8 +324,35 @@ export interface Page {
             blockName?: string | null;
             blockType: 'person';
           }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'board';
+          }
       )[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "board-members".
+ */
+export interface BoardMember {
+  id: number;
+  name: string;
+  role: string;
+  /**
+   * Reihenfolge der Anzeige (niedrige Zahlen zuerst)
+   */
+  order?: number | null;
+  image?: (number | null) | Media;
+  description?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -367,6 +399,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'board-members';
+        value: number | BoardMember;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -491,6 +527,7 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               subtitle?: T;
               backgroundImage?: T;
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -508,11 +545,13 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               subheading?: T;
+              variant?: T;
               features?:
                 | T
                 | {
                     title?: T;
                     description?: T;
+                    link?: T;
                     icon?: T;
                     id?: T;
                   };
@@ -574,7 +613,31 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        board?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "board-members_select".
+ */
+export interface BoardMembersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  order?: T;
+  image?: T;
+  description?: T;
+  email?: T;
+  phone?: T;
+  address?: T;
   updatedAt?: T;
   createdAt?: T;
 }

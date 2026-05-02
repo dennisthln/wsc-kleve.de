@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { TrendingUp, TrendingDown } from 'lucide-vue-next'
 
 const props = defineProps<{
   station: string
@@ -82,13 +83,11 @@ const formatDate = (dateStr: string) => {
     </div>
 
     <div v-else class="pegel-visual-group">
-      <!-- Status Badge -->
-      <div class="status-indicator" :style="{ backgroundColor: getStatusColor(pegel.stateMnwMhw) }">
-        {{ getStatusLabel(pegel.stateMnwMhw) }}
-      </div>
-
       <div class="pegel-main-row">
         <div class="pegel-value-group">
+          <div class="pegel-status-label" :style="{ color: getStatusColor(pegel.stateMnwMhw) }">
+            {{ getStatusLabel(pegel.stateMnwMhw) }}
+          </div>
           <div class="pegel-main">
             <span class="value">{{ pegel.value }}</span>
             <span class="unit">cm</span>
@@ -98,10 +97,9 @@ const formatDate = (dateStr: string) => {
           </div>
         </div>
 
-        <!-- Trend Icon (Only Rising or Falling) -->
-        <div v-if="pegel.trend === 1 || pegel.trend === -1" class="pegel-trend-box" :class="{ 'rising': pegel.trend === 1, 'falling': pegel.trend === -1 }">
-          <div class="trend-icon">{{ pegel.trend === 1 ? '▲' : '▼' }}</div>
-          <span class="trend-text">{{ pegel.trend === 1 ? 'Steigend' : 'Fallend' }}</span>
+        <!-- Trend Icon -->
+        <div v-if="pegel.trend === 1 || pegel.trend === -1" class="pegel-trend-indicator" :class="{ 'rising': pegel.trend === 1, 'falling': pegel.trend === -1 }">
+          <component :is="pegel.trend === 1 ? 'TrendingUp' : 'TrendingDown'" :size="48" />
         </div>
       </div>
     </div>
@@ -111,20 +109,14 @@ const formatDate = (dateStr: string) => {
 <style scoped>
 .pegel-display-wrapper {
   width: 100%;
-  max-width: 450px;
 }
 
-.status-indicator {
-  display: inline-block;
-  padding: 0.4rem 1.2rem;
-  border-radius: 100px;
-  color: white;
+.pegel-status-label {
   font-weight: 800;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 0.5rem;
 }
 
 .pegel-main-row {
@@ -155,30 +147,13 @@ const formatDate = (dateStr: string) => {
 
 .pegel-meta {
   margin-top: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-muted);
 }
 
-.pegel-trend-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.pegel-trend-indicator {
   padding: 1rem;
-  background: var(--color-bg-alt);
-  border-radius: var(--radius-md);
-  min-width: 100px;
-}
-
-.trend-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.trend-text {
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  opacity: 0.5;
 }
 
 .rising { color: #10b981; }

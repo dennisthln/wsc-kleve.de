@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { Menu, X, ChevronDown } from 'lucide-vue-next'
+import { Menu, X } from 'lucide-vue-next'
 
 const { cmsUrl } = useCmsApi()
 const isMenuOpen = ref(false)
-const activeDropdown = ref<string | null>(null)
 const isScrolled = ref(false)
 
 // Fetch Navigation from CMS (Client only for stability)
@@ -13,26 +12,22 @@ const { data: navData } = await useFetch(cmsUrl('/globals/navigation'), {
   lazy: true
 })
 
-// Fallback if CMS is empty
+// Simplified flat navigation fallback
 const fallbackNav = [
   { label: 'Startseite', link: '/' },
   { label: 'News', link: '/news/aktuelles' },
-  { 
-    label: 'Verein', 
-    link: '/verein',
-    children: [
-      { label: 'Mitglied werden', link: '/aufnahmeantrag' },
-      { label: 'Liegeplatz beantragen', link: '/antrag-liegeplatz' },
-      { label: 'Satzung & Gebühren', link: '/satzung' }
-    ]
-  },
+  { label: 'Verein', link: '/verein' },
   { label: 'Galerie', link: '/galerie' },
   { label: 'Kontakt', link: '/kontakt' },
 ]
 
 const menuItems = computed(() => {
   if (navData.value?.items && navData.value.items.length > 0) {
-    return navData.value.items
+    // We map to ensure children are ignored if they exist in CMS data for now
+    return navData.value.items.map((item: any) => ({
+      label: item.label,
+      link: item.link
+    }))
   }
   return fallbackNav
 })
@@ -51,7 +46,6 @@ onUnmounted(() => {
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
-  if (!isMenuOpen.value) activeDropdown.value = null
   
   // Prevent scrolling when menu is open
   if (isMenuOpen.value) {
@@ -61,13 +55,8 @@ const toggleMenu = () => {
   }
 }
 
-const toggleDropdown = (name: string) => {
-  activeDropdown.value = activeDropdown.value === name ? null : name
-}
-
 const closeMenu = () => {
   isMenuOpen.value = false
-  activeDropdown.value = null
   document.body.style.overflow = ''
 }
 </script>
@@ -82,22 +71,7 @@ const closeMenu = () => {
       <nav class="desktop-nav">
         <ul class="nav-list">
           <li v-for="item in menuItems" :key="item.label" class="nav-item">
-            <template v-if="item.children && item.children.length > 0">
-              <button class="nav-link dropdown-toggle" @click="toggleDropdown(item.label)">
-                {{ item.label }}
-                <ChevronDown :size="14" />
-              </button>
-              <Transition name="fade-slide">
-                <ul v-if="activeDropdown === item.label" class="dropdown-menu glass">
-                  <li v-for="child in item.children" :key="child.label">
-                    <NuxtLink :to="child.link" class="dropdown-link" @click="closeMenu">
-                      {{ child.label }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </Transition>
-            </template>
-            <NuxtLink v-else :to="item.link" class="nav-link">
+            <NuxtLink :to="item.link" class="nav-link">
               {{ item.label }}
             </NuxtLink>
           </li>
@@ -114,7 +88,7 @@ const closeMenu = () => {
     </div>
   </header>
 
-  <!-- Mobile Navigation Overlay - Moved outside header to avoid backdrop-filter clipping -->
+  <!-- Mobile Navigation Overlay -->
   <Transition name="mobile-menu-fade">
     <nav v-if="isMenuOpen" class="mobile-nav">
       <div class="mobile-nav-container container">
@@ -122,24 +96,7 @@ const closeMenu = () => {
           <li v-for="(item, index) in menuItems" :key="item.label" 
               class="mobile-nav-item" 
               :style="{ transitionDelay: `${index * 50}ms` }">
-            
-            <template v-if="item.children && item.children.length > 0">
-              <div class="mobile-nav-parent" @click="toggleDropdown(item.label)">
-                <span>{{ item.label }}</span>
-                <ChevronDown :size="24" :class="{ rotated: activeDropdown === item.label }" />
-              </div>
-              <Transition name="expand">
-                <ul v-if="activeDropdown === item.label" class="mobile-sub-list">
-                  <li v-for="child in item.children" :key="child.label">
-                    <NuxtLink :to="child.link" class="mobile-sub-link" @click="closeMenu">
-                      {{ child.label }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </Transition>
-            </template>
-            
-            <NuxtLink v-else :to="item.link" class="mobile-nav-link" @click="closeMenu">
+            <NuxtLink :to="item.link" class="mobile-nav-link" @click="closeMenu">
               {{ item.label }}
             </NuxtLink>
           </li>
@@ -162,7 +119,7 @@ const closeMenu = () => {
   left: 0;
   right: 0;
   height: var(--header-height);
-  z-index: 2000; /* Increased to stay above mobile nav */
+  z-index: 2000;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   color: white;
   display: flex;
@@ -190,6 +147,10 @@ const closeMenu = () => {
   width: 100%;
 }
 
+.logo {
+  display: flex;
+}
+
 .logo img {
   width: 60px;
   height: auto;
@@ -206,49 +167,21 @@ const closeMenu = () => {
   list-style: none;
 }
 
-.nav-link, .dropdown-toggle {
+.nav-link {
   font-weight: 600;
   font-size: 0.95rem;
   opacity: 0.9;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  cursor: pointer;
-  background: none;
-  border: none;
   color: white;
   transition: all 0.3s ease;
   padding: 0.5rem 0;
 }
 
-.nav-link:hover, .dropdown-toggle:hover {
+.nav-link:hover, .router-link-active.nav-link {
   opacity: 1;
   color: var(--color-accent);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  padding: 1rem 0;
-  min-width: 240px;
-  background: white;
-  border-radius: 12px;
-  margin-top: 1rem;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
-
-.dropdown-link {
-  display: block;
-  padding: 0.8rem 1.5rem;
-  font-weight: 500;
-  color: var(--color-primary);
-  transition: all 0.2s ease;
-}
-
-.dropdown-link:hover {
-  background: rgba(10, 36, 114, 0.05);
-  color: var(--color-primary);
-  padding-left: 1.8rem;
 }
 
 .header-actions {
@@ -311,12 +244,7 @@ const closeMenu = () => {
   margin-bottom: 2rem;
 }
 
-.mobile-nav-item {
-  opacity: 1;
-  transform: none;
-}
-
-.mobile-nav-link, .mobile-nav-parent {
+.mobile-nav-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -327,24 +255,8 @@ const closeMenu = () => {
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.mobile-nav-parent .rotated {
-  transform: rotate(180deg);
-}
-
-.mobile-sub-list {
-  background: rgba(255, 255, 255, 0.05);
-  margin: 0 -1rem;
-  padding: 0.5rem 1rem;
-  overflow: hidden;
-}
-
-.mobile-sub-link {
-  display: block;
-  padding: 1rem 0;
-  font-size: 1.2rem;
-  font-weight: 500;
-  opacity: 0.8;
-  color: white;
+.mobile-nav-link.router-link-active {
+  color: var(--color-accent);
 }
 
 .mobile-nav-footer {
@@ -363,28 +275,11 @@ const closeMenu = () => {
 }
 
 /* Transitions */
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: all 0.3s ease;
-}
-.fade-slide-enter-from, .fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
 .mobile-menu-fade-enter-active, .mobile-menu-fade-leave-active {
   transition: all 0.4s ease;
 }
 .mobile-menu-fade-enter-from, .mobile-menu-fade-leave-to {
   opacity: 0;
   transform: translateX(20px);
-}
-
-.expand-enter-active, .expand-leave-active {
-  transition: all 0.3s ease-in-out;
-  max-height: 500px;
-}
-.expand-enter-from, .expand-leave-to {
-  max-height: 0;
-  opacity: 0;
 }
 </style>

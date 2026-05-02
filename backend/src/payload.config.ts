@@ -12,6 +12,7 @@ import { Media } from './collections/Media'
 import { News } from './collections/News'
 import { Events } from './collections/Events'
 import { Pages } from './collections/Pages'
+import { BoardMembers } from './collections/BoardMembers'
 import { SiteSettings } from './globals/SiteSettings'
 import { Navigation } from './globals/Navigation'
 
@@ -27,7 +28,7 @@ export default buildConfig({
   },
   cors: ['http://localhost:3001', 'https://wsc-kleve.kleverweb.de'],
   csrf: ['http://localhost:3001', 'https://wsc-kleve.kleverweb.de'],
-  collections: [Users, Media, News, Events, Pages],
+  collections: [Users, Media, News, Events, Pages, BoardMembers],
   globals: [SiteSettings, Navigation],
   routes: {
     admin: '/admin',

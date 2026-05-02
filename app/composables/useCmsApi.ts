@@ -1,6 +1,7 @@
 export const useCmsApi = () => {
   const config = useRuntimeConfig()
-  const apiBase = (import.meta.server ? config.apiBaseInternal : config.public.apiBase).replace(/\/+$/, '')
+  const configuredBase = import.meta.server ? config.apiBaseInternal : config.public.apiBase
+  const apiBase = (import.meta.dev ? 'http://localhost:3000/api' : configuredBase).replace(/\/+$/, '')
 
   const cmsUrl = (path: string) => {
     const normalizedPath = path.startsWith('/') ? path : `/${path}`
