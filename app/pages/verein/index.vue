@@ -1,5 +1,6 @@
 <script setup lang='ts'>
-const { data: pageData } = await useFetch('/api/pages', {
+const { cmsUrl } = useCmsApi()
+const { data: pageData } = await useFetch(cmsUrl('/pages'), {
   query: {
     'where[slug][equals]': 'verein',
   },

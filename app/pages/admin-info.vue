@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { data: settings } = await useFetch('/api/globals/site-settings')
+const { cmsUrl } = useCmsApi()
+const { data: settings } = await useFetch(cmsUrl('/globals/site-settings'))
 </script>
 
 <template>

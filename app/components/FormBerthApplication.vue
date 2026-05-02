@@ -411,7 +411,8 @@ const steps = [
 
 onMounted(async () => {
   try {
-    const res = await $fetch('/api/globals/site-settings') as any
+    const { cmsUrl } = useCmsApi()
+    const res = await $fetch(cmsUrl('/globals/site-settings')) as any
     if (res && res.pricing) pricing.value = res.pricing
   } catch (e) {
     console.warn('Verwende Standardpreise.')

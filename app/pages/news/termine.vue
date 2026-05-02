@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { MapPin, Clock, Calendar } from 'lucide-vue-next'
 
-const { data: events, pending } = await useFetch<any>('/api/events?sort=date')
+const { cmsUrl } = useCmsApi()
+const { data: events, pending } = await useFetch<any>(cmsUrl('/events?sort=date'))
 
 const getDay = (date: string) => new Date(date).getDate()
 const getMonth = (date: string) => new Date(date).toLocaleDateString('de-DE', { month: 'short' })

@@ -1,9 +1,10 @@
 <script setup lang="ts">
+const { cmsUrl } = useCmsApi()
 const { data: homepage } = await useAsyncData('home-page', () => loadCmsPage('/'))
 
 const { data: settings } = await useAsyncData('site-settings', async () => {
   try {
-    return await $fetch<any>('/api/globals/site-settings')
+    return await $fetch<any>(cmsUrl('/globals/site-settings'))
   } catch (error: any) {
     if (error?.statusCode === 404) {
       return null

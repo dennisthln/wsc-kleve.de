@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Calendar, Tag } from 'lucide-vue-next'
 
-const { data: news, pending, error } = await useFetch<any>('/api/news?sort=-publishDate')
+const { cmsUrl } = useCmsApi()
+const { data: news, pending, error } = await useFetch<any>(cmsUrl('/news?sort=-publishDate'))
 
 const getCategoryColor = (cat: string) => {
   const colors: Record<string, string> = {

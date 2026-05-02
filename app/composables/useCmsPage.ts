@@ -3,7 +3,9 @@ type CmsPageResult = {
 }
 
 const fetchCmsPageBySlug = async (slug: string) => {
-  return await $fetch<CmsPageResult>('/api/pages', {
+  const { cmsUrl } = useCmsApi()
+
+  return await $fetch<CmsPageResult>(cmsUrl('/pages'), {
     query: {
       'where[slug][equals]': slug,
     },
@@ -11,9 +13,10 @@ const fetchCmsPageBySlug = async (slug: string) => {
 }
 
 export const loadCmsPage = async (slug: string) => {
+  const { cmsUrl } = useCmsApi()
   const normalizedSlug = slug === '/' ? '/' : slug.replace(/\/+$/, '')
   if (normalizedSlug === '/') {
-    const pages = await $fetch<CmsPageResult>('/api/pages', {
+    const pages = await $fetch<CmsPageResult>(cmsUrl('/pages'), {
       query: {
         limit: 100,
       },

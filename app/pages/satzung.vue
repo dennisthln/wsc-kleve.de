@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight, FileText, Scale, Anchor, Calculator } from 'lucide-vue-next'
 
-const { data: pageData } = await useFetch('/api/pages', {
+const { cmsUrl } = useCmsApi()
+const { data: pageData } = await useFetch(cmsUrl('/pages'), {
   query: {
     'where[slug][equals]': 'satzung',
   },
