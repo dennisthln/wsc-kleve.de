@@ -106,6 +106,75 @@ export const usePayloadCms = () => {
     selectedBlockIndex.value = null
   }
 
+  const updateDraftPage = (updater: (page: CmsPageDoc) => void) => {
+    if (!draftPage.value) {
+      return
+    }
+
+    const nextDraft = clonePage(draftPage.value)
+    updater(nextDraft)
+    draftPage.value = nextDraft
+  }
+
+  const updateSelectedBlockField = (key: string, value: any) => {
+    if (selectedBlockIndex.value === null) {
+      return
+    }
+
+    updateDraftPage((page) => {
+      const block = page.layout?.[selectedBlockIndex.value!]
+      if (block) {
+        block[key] = value
+      }
+    })
+  }
+
+  const updateSelectedBlockArrayField = (arrayKey: string, index: number, key: string, value: any) => {
+    if (selectedBlockIndex.value === null) {
+      return
+    }
+
+    updateDraftPage((page) => {
+      const target = page.layout?.[selectedBlockIndex.value!]?.[arrayKey]?.[index]
+      if (target) {
+        target[key] = value
+      }
+    })
+  }
+
+  const updateSelectedBlockRichTextNode = (index: number, value: string) => {
+    if (selectedBlockIndex.value === null) {
+      return
+    }
+
+    updateDraftPage((page) => {
+      const children = page.layout?.[selectedBlockIndex.value!]?.text?.root?.children
+      const node = children?.[index]
+      if (!node?.children) {
+        return
+      }
+
+      const textChild = node.children.find((child: any) => typeof child.text === 'string')
+      if (textChild) {
+        textChild.text = value
+      }
+    })
+  }
+
+  const replaceSelectedBlock = (block: any) => {
+    if (selectedBlockIndex.value === null) {
+      return
+    }
+
+    updateDraftPage((page) => {
+      if (!page.layout) {
+        return
+      }
+
+      page.layout[selectedBlockIndex.value!] = clonePage(block)
+    })
+  }
+
   const saveDraft = async () => {
     if (!draftPage.value?.id) {
       return
@@ -157,6 +226,7 @@ export const usePayloadCms = () => {
     navigationAdminUrl,
     pageAdminUrl,
     pageChecked,
+    replaceSelectedBlock,
     saveDraft,
     saving,
     selectedBlock,
@@ -165,6 +235,9 @@ export const usePayloadCms = () => {
     setEditMode,
     settingsAdminUrl,
     syncPage,
+    updateSelectedBlockArrayField,
+    updateSelectedBlockField,
+    updateSelectedBlockRichTextNode,
     user,
   }
 }

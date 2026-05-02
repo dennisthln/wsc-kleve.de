@@ -51,13 +51,22 @@ watch(
     }
   },
 )
+
+watch(
+  () => editMode.value,
+  (active) => {
+    if (active) {
+      isOpen.value = false
+    }
+  },
+)
 </script>
 
 <template>
   <div v-if="isVisible" class="cms-shell" :class="{ 'is-open': isOpen }">
     <button class="cms-toggle" type="button" @click="isOpen = !isOpen">
       <Eye :size="16" />
-      <span>CMS</span>
+      <span>{{ editMode ? 'Editor aktiv' : 'CMS' }}</span>
     </button>
 
     <aside class="cms-panel glass">

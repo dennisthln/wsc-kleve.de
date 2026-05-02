@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const {
-  draftPage,
   editMode,
+  currentPage,
+  discardDraft,
+  hasDraftChanges,
+  replaceSelectedBlock,
   saveDraft,
   saving,
   selectedBlock,
   selectedBlockIndex,
 } = usePayloadCms()
+
+const cloneValue = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 
 const blockTypeLabels: Record<string, string> = {
   hero: 'Hero',
@@ -29,33 +34,32 @@ const blockTitle = computed(() => {
   return blockTypeLabels[selectedBlock.value.blockType] || selectedBlock.value.blockType || 'Block'
 })
 
-const updateField = (key: string, value: any) => {
-  if (!selectedBlock.value) {
-    return
-  }
+const blockDraft = ref<any | null>(null)
+const isSyncingLocalDraft = ref(false)
 
-  selectedBlock.value[key] = value
-}
+watch(
+  () => [currentPage.value?.id, selectedBlockIndex.value],
+  () => {
+    isSyncingLocalDraft.value = true
+    blockDraft.value = selectedBlock.value ? cloneValue(selectedBlock.value) : null
+    queueMicrotask(() => {
+      isSyncingLocalDraft.value = false
+    })
+  },
+  { immediate: true },
+)
 
-const updateArrayField = (arrayKey: string, index: number, key: string, value: any) => {
-  const target = selectedBlock.value?.[arrayKey]?.[index]
-  if (target) {
-    target[key] = value
-  }
-}
+watch(
+  blockDraft,
+  (value) => {
+    if (isSyncingLocalDraft.value || !value || selectedBlockIndex.value === null) {
+      return
+    }
 
-const updateRichTextNode = (index: number, value: string) => {
-  const children = selectedBlock.value?.text?.root?.children
-  const node = children?.[index]
-  if (!node?.children) {
-    return
-  }
-
-  const textChild = node.children.find((child: any) => typeof child.text === 'string')
-  if (textChild) {
-    textChild.text = value
-  }
-}
+    replaceSelectedBlock(value)
+  },
+  { deep: true },
+)
 </script>
 
 <template>
@@ -70,25 +74,25 @@ const updateRichTextNode = (index: number, value: string) => {
       </button>
     </div>
 
-    <div v-if="selectedBlock?.blockType === 'hero'" class="editor-fields">
+    <div v-if="blockDraft?.blockType === 'hero'" class="editor-fields">
       <label>
         <span>Titel</span>
-        <input :value="selectedBlock.title || ''" @input="updateField('title', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.title" />
       </label>
       <label>
         <span>Untertitel</span>
-        <textarea rows="3" :value="selectedBlock.subtitle || ''" @input="updateField('subtitle', ($event.target as HTMLTextAreaElement).value)" />
+        <textarea v-model="blockDraft.subtitle" rows="3" />
       </label>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'pegel'" class="editor-fields">
+    <div v-else-if="blockDraft?.blockType === 'pegel'" class="editor-fields">
       <label>
         <span>Titel</span>
-        <input :value="selectedBlock.title || ''" @input="updateField('title', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.title" />
       </label>
       <label>
         <span>Station</span>
-        <select :value="selectedBlock.station || 'EMMERICH'" @change="updateField('station', ($event.target as HTMLSelectElement).value)">
+        <select v-model="blockDraft.station">
           <option value="EMMERICH">Emmerich</option>
           <option value="REES">Rees</option>
           <option value="DUESSELDORF">Düsseldorf</option>
@@ -96,28 +100,28 @@ const updateRichTextNode = (index: number, value: string) => {
       </label>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'features'" class="editor-fields">
+    <div v-else-if="blockDraft?.blockType === 'features'" class="editor-fields">
       <label>
         <span>Überschrift</span>
-        <input :value="selectedBlock.heading || ''" @input="updateField('heading', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.heading" />
       </label>
       <label>
         <span>Unterzeile</span>
-        <textarea rows="3" :value="selectedBlock.subheading || ''" @input="updateField('subheading', ($event.target as HTMLTextAreaElement).value)" />
+        <textarea v-model="blockDraft.subheading" rows="3" />
       </label>
-      <div v-for="(feature, index) in selectedBlock.features || []" :key="feature.id || index" class="editor-group">
+      <div v-for="(feature, index) in blockDraft.features || []" :key="feature.id || index" class="editor-group">
         <strong>Feature {{ index + 1 }}</strong>
         <label>
           <span>Titel</span>
-          <input :value="feature.title || ''" @input="updateArrayField('features', index, 'title', ($event.target as HTMLInputElement).value)" />
+          <input v-model="feature.title" />
         </label>
         <label>
           <span>Beschreibung</span>
-          <textarea rows="3" :value="feature.description || ''" @input="updateArrayField('features', index, 'description', ($event.target as HTMLTextAreaElement).value)" />
+          <textarea v-model="feature.description" rows="3" />
         </label>
         <label>
           <span>Icon</span>
-          <select :value="feature.icon || 'anchor'" @change="updateArrayField('features', index, 'icon', ($event.target as HTMLSelectElement).value)">
+          <select v-model="feature.icon">
             <option value="sailing">Sailing</option>
             <option value="anchor">Anchor</option>
             <option value="waves">Waves</option>
@@ -127,70 +131,69 @@ const updateRichTextNode = (index: number, value: string) => {
       </div>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'content'" class="editor-fields">
-      <label v-for="(node, index) in selectedBlock.text?.root?.children || []" :key="node.id || index">
+    <div v-else-if="blockDraft?.blockType === 'content'" class="editor-fields">
+      <label v-for="(node, index) in blockDraft.text?.root?.children || []" :key="node.id || index">
         <span>{{ node.type === 'heading' ? `Heading ${index + 1}` : `Text ${index + 1}` }}</span>
         <textarea
+          v-model="node.children.find((child: any) => typeof child.text === 'string').text"
           rows="4"
-          :value="node.children?.find((child: any) => typeof child.text === 'string')?.text || ''"
-          @input="updateRichTextNode(index, ($event.target as HTMLTextAreaElement).value)"
         />
       </label>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'cta'" class="editor-fields">
+    <div v-else-if="blockDraft?.blockType === 'cta'" class="editor-fields">
       <label>
         <span>Titel</span>
-        <input :value="selectedBlock.title || ''" @input="updateField('title', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.title" />
       </label>
       <label>
         <span>Beschreibung</span>
-        <textarea rows="3" :value="selectedBlock.description || ''" @input="updateField('description', ($event.target as HTMLTextAreaElement).value)" />
+        <textarea v-model="blockDraft.description" rows="3" />
       </label>
       <label>
         <span>Button Text</span>
-        <input :value="selectedBlock.buttonLabel || ''" @input="updateField('buttonLabel', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.buttonLabel" />
       </label>
       <label>
         <span>Button Link</span>
-        <input :value="selectedBlock.buttonLink || ''" @input="updateField('buttonLink', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.buttonLink" />
       </label>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'info'" class="editor-fields">
+    <div v-else-if="blockDraft?.blockType === 'info'" class="editor-fields">
       <label>
         <span>Überschrift</span>
-        <input :value="selectedBlock.heading || ''" @input="updateField('heading', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.heading" />
       </label>
-      <div v-for="(item, index) in selectedBlock.items || []" :key="item.id || index" class="editor-group">
+      <div v-for="(item, index) in blockDraft.items || []" :key="item.id || index" class="editor-group">
         <strong>Eintrag {{ index + 1 }}</strong>
         <label>
           <span>Label</span>
-          <input :value="item.label || ''" @input="updateArrayField('items', index, 'label', ($event.target as HTMLInputElement).value)" />
+          <input v-model="item.label" />
         </label>
         <label>
           <span>Wert</span>
-          <input :value="item.value || ''" @input="updateArrayField('items', index, 'value', ($event.target as HTMLInputElement).value)" />
+          <input v-model="item.value" />
         </label>
       </div>
     </div>
 
-    <div v-else-if="selectedBlock?.blockType === 'person'" class="editor-fields">
+    <div v-else-if="blockDraft?.blockType === 'person'" class="editor-fields">
       <label>
         <span>Rolle</span>
-        <input :value="selectedBlock.role || ''" @input="updateField('role', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.role" />
       </label>
       <label>
         <span>Name</span>
-        <input :value="selectedBlock.name || ''" @input="updateField('name', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.name" />
       </label>
       <label>
         <span>Adresse</span>
-        <textarea rows="2" :value="selectedBlock.address || ''" @input="updateField('address', ($event.target as HTMLTextAreaElement).value)" />
+        <textarea v-model="blockDraft.address" rows="2" />
       </label>
       <label>
         <span>Telefon</span>
-        <input :value="selectedBlock.phone || ''" @input="updateField('phone', ($event.target as HTMLInputElement).value)" />
+        <input v-model="blockDraft.phone" />
       </label>
     </div>
 

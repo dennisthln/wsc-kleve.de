@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const { currentPage, draftPage, editMode, syncPage } = usePayloadCms()
 
 const slugPath = computed(() => {
   const slug = route.params.slug
@@ -17,7 +18,15 @@ const { data: page } = await useAsyncData(
   () => loadCmsPage(slugPath.value),
 )
 
-if (!page.value) {
+watchEffect(() => {
+  if (page.value) {
+    syncPage(page.value)
+  }
+})
+
+const renderedPage = computed(() => (editMode.value ? draftPage.value : currentPage.value) ?? page.value)
+
+if (!renderedPage.value) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Seite nicht gefunden',
@@ -26,5 +35,5 @@ if (!page.value) {
 </script>
 
 <template>
-  <BlockRenderer :blocks="page?.layout" />
+  <BlockRenderer :blocks="renderedPage?.layout" />
 </template>

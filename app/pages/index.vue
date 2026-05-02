@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { cmsUrl } = useCmsApi()
+const { currentPage, draftPage, editMode, syncPage } = usePayloadCms()
 const { data: homepage } = await useAsyncData('home-page', () => loadCmsPage('/'))
 
 const { data: settings } = await useAsyncData('site-settings', async () => {
@@ -20,22 +21,44 @@ const { data: settings } = await useAsyncData('site-settings', async () => {
     statusMessage: 'Startseite nicht gefunden',
   })
 }*/
+
+watchEffect(() => {
+  if (homepage.value) {
+    syncPage(homepage.value)
+  }
+})
+
+const renderedPage = computed(() => (editMode.value ? draftPage.value : currentPage.value) ?? homepage.value)
+const leadingBlocks = computed(() => renderedPage.value?.layout?.filter((block: any) => block.blockType === 'hero' || block.blockType === 'pegel') ?? [])
+const leadingIndexMap = computed(() =>
+  renderedPage.value?.layout
+    ?.map((block: any, index: number) => ({ block, index }))
+    .filter(({ block }: any) => block.blockType === 'hero' || block.blockType === 'pegel')
+    .map(({ index }: any) => index) ?? [],
+)
+const trailingBlocks = computed(() => renderedPage.value?.layout?.filter((block: any) => block.blockType !== 'hero' && block.blockType !== 'pegel') ?? [])
+const trailingIndexMap = computed(() =>
+  renderedPage.value?.layout
+    ?.map((block: any, index: number) => ({ block, index }))
+    .filter(({ block }: any) => block.blockType !== 'hero' && block.blockType !== 'pegel')
+    .map(({ index }: any) => index) ?? [],
+)
 </script>
 
 <template>
   <div class="homepage">
     <!-- HERO SECTION (From Blocks) -->
-    <template v-if="homepage?.layout">
+    <template v-if="renderedPage?.layout">
       <!-- We find the hero and pegel blocks to show them first -->
-      <BlockRenderer :blocks="homepage.layout.filter(b => b.blockType === 'hero' || b.blockType === 'pegel')" />
+      <BlockRenderer :blocks="leadingBlocks" :index-map="leadingIndexMap" />
     </template>
 
     <!-- DYNAMIC EVENTS SECTION -->
     <EventsSection />
 
     <!-- REMAINING BLOCKS (Excluding hero and pegel) -->
-    <template v-if="homepage?.layout">
-      <BlockRenderer :blocks="homepage.layout.filter(b => b.blockType !== 'hero' && b.blockType !== 'pegel')" />
+    <template v-if="renderedPage?.layout">
+      <BlockRenderer :blocks="trailingBlocks" :index-map="trailingIndexMap" />
     </template>
 
     <!-- DYNAMIC NEWS SECTION -->

@@ -4,6 +4,7 @@ import PegelDisplay from './PegelDisplay.vue'
 
 const props = defineProps<{
   blocks?: any[]
+  indexMap?: number[]
 }>()
 
 const { editMode, selectedBlockIndex, selectBlock, user } = usePayloadCms()
@@ -22,11 +23,13 @@ const blockLabel = (block: any) => {
   return labels[block.blockType] || block.blockType || 'Block'
 }
 
+const resolveBlockIndex = (index: number) => props.indexMap?.[index] ?? index
+
 const selectEditableBlock = (index: number, event: MouseEvent) => {
   if (editMode.value && user.value) {
     event.preventDefault()
     event.stopPropagation()
-    selectBlock(index)
+    selectBlock(resolveBlockIndex(index))
   }
 }
 
@@ -46,7 +49,7 @@ const getIcon = (iconName: string) => {
     <div v-for="(block, index) in blocks" :key="index">
       <div
         class="cms-block-shell"
-        :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === index }"
+        :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === resolveBlockIndex(index) }"
         @click="selectEditableBlock(index, $event)"
       >
         <div v-if="editMode && user" class="cms-block-label">
