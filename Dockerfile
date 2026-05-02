@@ -23,6 +23,8 @@ WORKDIR /app
 COPY --from=base /app/backend/.next/standalone ./backend
 COPY --from=base /app/backend/.next/static ./backend/.next/static
 COPY --from=base /app/public ./backend/public
+COPY --from=base /app/backend/node_modules ./backend/node_modules
+COPY --from=base /app/backend/package.json ./backend/package.json
 
 # Copy Frontend (from root .output)
 COPY --from=base /app/.output ./app/.output
@@ -33,6 +35,7 @@ COPY nginx.conf /etc/nginx/sites-available/default
 # Environment defaults
 ENV NODE_ENV=production
 ENV PAYLOAD_CONFIG_PATH=/app/backend/payload.config.ts
+ENV NUXT_PUBLIC_API_BASE=/api
 
 # Start script
 RUN echo 'import { spawn } from "child_process"; \

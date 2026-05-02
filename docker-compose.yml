@@ -8,7 +8,7 @@ services:
     environment:
       - DATABASE_URI=file:/app/backend/payload.db
       - PAYLOAD_SECRET=${PAYLOAD_SECRET:-development_secret}
-      - NUXT_PUBLIC_API_BASE=https://wsc-kleve.kleverweb.de
+      - NUXT_PUBLIC_API_BASE=/api
     volumes:
       - ./backend/payload.db:/app/backend/payload.db
       - ./backend/media:/app/backend/media
