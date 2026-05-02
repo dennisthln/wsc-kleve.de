@@ -67,7 +67,7 @@ const mergePages = async () => {
     collection: 'pages',
     id: vereinPage.docs[0].id,
     data: {
-      layout: newLayout
+      layout: newLayout as any
     }
   })
 

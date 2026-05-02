@@ -1,22 +1,15 @@
 services:
-  backend:
+  app:
     build:
-      context: ./backend
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "49117:8080" # Unified Entry Point (Nuxt + Payload)
     environment:
-      - DATABASE_URI=file:./payload.db
+      - DATABASE_URI=file:/app/backend/payload.db
       - PAYLOAD_SECRET=${PAYLOAD_SECRET:-development_secret}
+      - NUXT_PUBLIC_API_BASE=http://localhost:3000
     volumes:
-      - ./backend/payload.db:/app/payload.db
-      - ./backend/media:/app/media
-
-  frontend:
-    build:
-      context: ./app
-    ports:
-      - "3001:3000"
-    environment:
-      - NUXT_PUBLIC_API_BASE=http://backend:3000
-    depends_on:
-      - backend
+      - ./backend/payload.db:/app/backend/payload.db
+      - ./backend/media:/app/backend/media
+    restart: always

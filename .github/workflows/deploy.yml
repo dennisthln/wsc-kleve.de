@@ -1,4 +1,4 @@
-name: Deploy WSC Kleve
+name: Deploy WSC Kleve (Unified)
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
     paths:
       - "app/**"
       - "backend/**"
+      - "Dockerfile"
       - "docker-compose.yml"
       - "bun.lockb"
-      - ".github/workflows/**"
 
 jobs:
   deploy:
@@ -23,7 +23,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H wsc-kleve.kleverweb.de >> ~/.ssh/known_hosts
+          ssh-keyscan -H wsc-kleve.de >> ~/.ssh/known_hosts
 
       - name: Sync files to server
         run: |
@@ -38,11 +38,11 @@ jobs:
             --exclude='backend/payload.db' \
             --exclude='backend/media' \
             ./ \
-            root@wsc-kleve.kleverweb.de:/var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
+            root@wsc-kleve.de:/var/www/vhosts/wsc-kleve.de/
 
-      - name: Deploy Containers
+      - name: Deploy Unified Container
         run: |
-          ssh root@wsc-kleve.kleverweb.de << 'EOF'
-            cd /var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
-            docker-compose -p wsc-kleve up -d --build
+          ssh root@wsc-kleve.de << 'EOF'
+            cd /var/www/vhosts/wsc-kleve.de/
+            docker-compose -p wsckleve up -d --build app
           EOF
