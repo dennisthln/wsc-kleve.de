@@ -6,10 +6,10 @@ services:
     ports:
       - "49117:8080" # Unified Entry Point (Nuxt + Payload)
     environment:
-      - DATABASE_URI=file:/app/backend/payload.db
+      - DATABASE_URI=file:/data/payload.db
       - PAYLOAD_SECRET=${PAYLOAD_SECRET:-development_secret}
       - NUXT_PUBLIC_API_BASE=/api
     volumes:
-      - ./backend/payload.db:/app/backend/payload.db
+      - ./backend/data:/data
       - ./backend/media:/app/backend/media
     restart: always
