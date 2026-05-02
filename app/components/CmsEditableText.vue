@@ -77,7 +77,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     @blur="handleBlur"
     @keydown="handleKeydown"
   >
-    {{ localValue }}
+    <span v-html="localValue"/>
   </component>
 </template>
 
