@@ -8,7 +8,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
       <div class="container footer-grid">
         <!-- Brand Section -->
         <div class="footer-brand">
-          <img src="/logo.png" class="footer-logo" />
+          <img src="/logo-white.svg" class="footer-logo" />
           <p class="brand-desc">
             Ihr traditioneller Wassersportclub am Niederrhein. Erleben Sie Gemeinschaft, Natur und die Freiheit auf dem Wasser seit 1970.
           </p>
