@@ -546,10 +546,9 @@ const getIcon = (iconName: string) => {
 .contact-link { font-weight: 600; color: var(--color-primary); transition: color 0.3s ease; }
 .contact-link:hover { color: var(--color-secondary); }
 
-.features-section { background: white; }
 .section-header { text-align: center; margin-bottom: 5rem; }
 .section-subtitle { color: var(--color-text-muted); font-size: 1.2rem; max-width: 600px; margin: 1.5rem auto 0; }
-.features-section.is-overlap { position: relative; z-index: 20; padding-bottom: 6rem; margin-top: -100px; }
+.features-section.is-overlap { position: relative; z-index: 20; padding-bottom: 6rem; margin-top: -180px; }
 .teaser-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
 .feature-card.glass { padding: 3rem 2.5rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 20px 40px rgba(10, 36, 114, 0.08); }
 .feature-card.glass:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(10, 36, 114, 0.15); background: white; }
