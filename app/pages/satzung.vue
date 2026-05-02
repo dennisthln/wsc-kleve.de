@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ChevronRight, FileText, Scale, Anchor, Calculator } from 'lucide-vue-next'
 
-const { data: pageData } = await useFetch('/api/pages?where[slug][equals]=satzung')
+const { data: pageData } = await useFetch('/api/pages', {
+  query: {
+    'where[slug][equals]': 'satzung',
+  },
+})
 const page = computed(() => pageData.value?.docs?.[0])
 
 const toc = [

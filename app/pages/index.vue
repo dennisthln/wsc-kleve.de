@@ -1,15 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('home-page', async () => {
-  try {
-    return await $fetch<any>('/api/pages?where[slug][equals]=home')
-  } catch (error: any) {
-    if (error?.statusCode === 404) {
-      return null
-    }
-
-    throw error
-  }
-})
+const { data: homepage } = await useAsyncData('home-page', () => loadCmsPage('/'))
 
 const { data: settings } = await useAsyncData('site-settings', async () => {
   try {
@@ -22,8 +12,6 @@ const { data: settings } = await useAsyncData('site-settings', async () => {
     throw error
   }
 })
-
-const homepage = computed(() => page.value?.docs?.[0])
 
 if (!homepage.value) {
   throw createError({
