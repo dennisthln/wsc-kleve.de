@@ -28,6 +28,9 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/src ./src
+
+ENV PAYLOAD_CONFIG_PATH=/app/src/payload.config.ts
 
 EXPOSE 3000
 

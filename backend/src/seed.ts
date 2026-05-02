@@ -1,7 +1,8 @@
 import { getPayload } from 'payload'
 import config from './payload.config'
+import { defaultNavigation, defaultSiteSettings } from './seed-defaults'
 
-const seed = async () => {
+export const seed = async () => {
   const payload = await getPayload({ config })
 
   console.log('Seed started (Advanced Block Version)...')
@@ -9,27 +10,12 @@ const seed = async () => {
   // 1. Site Settings
   await payload.updateGlobal({
     slug: 'site-settings',
-    data: {
-      maintenanceMode: false,
-      maintenanceNotice: 'Die Internetseite wird gerade aktualisiert.',
-      pricing: {
-        berth: {
-          water: {
-            member: { per_m2: 10.20 },
-            guest: { per_m2: 15.30, base_fee: 149.00 }
-          },
-          dinghy: {
-            member: { fixed: 51.00 },
-            guest: { fixed: 95.00 }
-          }
-        },
-        power: {
-          connection_fee: 10.00,
-          advance_payment: 51.00
-        },
-        box_lengths: [6, 8, 9]
-      }
-    },
+    data: defaultSiteSettings,
+  })
+
+  await payload.updateGlobal({
+    slug: 'navigation',
+    data: defaultNavigation,
   })
 
   // 2. Clear existing data
@@ -575,7 +561,13 @@ const seed = async () => {
   console.log('✅ Steganlage Page created')
 
   console.log('Seed finished successfully!')
-  process.exit(0)
 }
 
-seed()
+if (import.meta.main) {
+  seed()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error('Seed failed', error)
+      process.exit(1)
+    })
+}
