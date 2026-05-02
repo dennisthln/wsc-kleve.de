@@ -8,11 +8,16 @@ const props = defineProps<{
   indexMap?: number[]
 }>()
 
+const { cmsUrl } = useCmsApi()
+
 // Fetch Board Members if board block is present
 const hasBoardBlock = computed(() => props.blocks?.some(b => b.blockType === 'board'))
-const { data: boardData } = await useFetch('/api/board-members?sort=order', {
+const { data: boardData } = await useFetch(cmsUrl('/board-members'), {
+  query: {
+    sort: 'order',
+  },
   immediate: hasBoardBlock.value,
-  watch: [hasBoardBlock]
+  watch: [hasBoardBlock],
 })
 
 const boardMembers = computed(() => boardData.value?.docs || [])

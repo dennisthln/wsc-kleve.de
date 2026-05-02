@@ -8,6 +8,13 @@ const slugPath = computed(() => {
   return `/${segments.join('/')}`
 })
 
+if (route.path.startsWith('/api/')) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: `Page not found: ${route.path}`,
+  })
+}
+
 const { data: page } = await useAsyncData(
   () => `cms-page:${slugPath.value}`,
   () => loadCmsPage(slugPath.value),
