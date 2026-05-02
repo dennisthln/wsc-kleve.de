@@ -5,11 +5,19 @@ type CmsPageResult = {
 const fetchCmsPageBySlug = async (slug: string) => {
   const { cmsUrl } = useCmsApi()
 
-  return await $fetch<CmsPageResult>(cmsUrl('/pages'), {
-    query: {
-      'where[slug][equals]': slug,
-    },
-  })
+  try {
+    return await $fetch<CmsPageResult>(cmsUrl('/pages'), {
+      query: {
+        'where[slug][equals]': slug,
+      },
+    })
+  } catch (error: any) {
+    if (error?.statusCode === 404) {
+      return { docs: [] }
+    }
+
+    throw error
+  }
 }
 
 export const loadCmsPage = async (slug: string) => {
