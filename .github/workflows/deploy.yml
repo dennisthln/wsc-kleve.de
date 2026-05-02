@@ -37,11 +37,11 @@ jobs:
             --exclude='backend/payload.db' \
             --exclude='backend/media' \
             ./ \
-            root@wsc-kleve.de:/var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
+            root@wsc-kleve.kleverweb.de:/var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
 
       - name: Deploy Containers
         run: |
-          ssh root@wsc-kleve.de << 'EOF'
+          ssh root@wsc-kleve.kleverweb.de << 'EOF'
             cd /var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
             docker-compose -p wsc-kleve up -d --build
           EOF
