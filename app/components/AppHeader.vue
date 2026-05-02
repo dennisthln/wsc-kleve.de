@@ -157,14 +157,16 @@ const closeMenu = () => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .logo {
   display: flex;
+  height: 100%;
 }
 
 .logo img {
-  width: 60px;
+  width: 95px;
   height: auto;
   transition: transform 0.3s ease;
 }
