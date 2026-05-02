@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { Anchor, Ship, Waves, Users, Activity, ArrowRight, Phone, MapPin } from 'lucide-vue-next'
+import { Anchor, Ship, Waves, Users, Activity, ArrowRight, Phone, MapPin, Mail, ChevronRight } from 'lucide-vue-next'
 import PegelDisplay from './PegelDisplay.vue'
 import WeatherDisplay from './WeatherDisplay.vue'
+import EventsSection from './EventsSection.vue'
+import NewsSection from './NewsSection.vue'
 
 const props = defineProps<{
   blocks?: any[]
   indexMap?: number[]
 }>()
 
-const { cmsUrl } = useCmsApi()
-
 // Fetch Board Members if board block is present
 const hasBoardBlock = computed(() => props.blocks?.some(b => b.blockType === 'board'))
-const { data: boardData } = await useFetch(cmsUrl('/board-members'), {
-  query: {
-    sort: 'order',
-  },
+const { data: boardData } = await useFetch('/api/board-members?sort=order', {
   immediate: hasBoardBlock.value,
-  watch: [hasBoardBlock],
+  watch: [hasBoardBlock]
 })
 
 const boardMembers = computed(() => boardData.value?.docs || [])
@@ -27,52 +24,58 @@ const { editMode, selectedBlockIndex, selectBlock, user } = usePayloadCms()
 const blockLabel = (block: any) => {
   const labels: Record<string, string> = {
     hero: 'Hero',
-    pegel: 'Pegel',
-    features: 'Features',
-    content: 'Content',
-    cta: 'CTA',
-    info: 'Info',
-    person: 'Person',
+    content: 'Textinhalt',
+    features: 'Features/Teaser',
+    imageGrid: 'Bilder-Raster',
+    cta: 'Call to Action',
+    info: 'Info-Boxen',
+    pegel: 'Rheinpegel',
+    person: 'Person/Vorstand',
+    board: 'Vorstand-Liste',
+    events: 'Termine',
+    news: 'Neuigkeiten',
+    contact: 'Kontaktformular'
   }
-
-  return labels[block.blockType] || block.blockType || 'Block'
+  return labels[block.blockType] || block.blockType
 }
 
-const resolveBlockIndex = (index: number) => props.indexMap?.[index] ?? index
-
-const selectEditableBlock = (index: number, event: MouseEvent) => {
-  if (editMode.value && user.value) {
-    event.preventDefault()
-    event.stopPropagation()
-    selectBlock(resolveBlockIndex(index))
-  }
+const resolveBlockIndex = (rendererIndex: number) => {
+  return props.indexMap ? props.indexMap[rendererIndex] : rendererIndex
 }
 
 const getIcon = (iconName: string) => {
-  switch (iconName) {
-    case 'sailing': return Ship
-    case 'anchor': return Anchor
-    case 'waves': return Waves
-    case 'users': return Users
-    default: return Anchor
+  const icons: Record<string, any> = {
+    anchor: Anchor,
+    ship: Ship,
+    waves: Waves,
+    users: Users,
+    activity: Activity,
+    sailing: Ship
   }
-}
-</script>
-
+  return icons[iconName] || Anchor
 <template>
-  <div class="blocks-wrapper" v-if="blocks && blocks.length">
-    <div v-for="(block, index) in blocks" :key="index">
-      <div
-        class="cms-block-shell"
-        :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === resolveBlockIndex(index) }"
-        @click="selectEditableBlock(index, $event)"
-      >
+  <div class="blocks-renderer">
+    <div v-for="(block, index) in blocks" :key="index" class="cms-block-shell"
+         :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === resolveBlockIndex(index) }"
+         @click="user && selectBlock(resolveBlockIndex(index))">
+
+      <!-- Error boundary or simple check -->
+      <div v-if="!block.blockType" class="bg-red-100 p-4 text-red-800">
+        Block an Index {{ index }} hat keinen gültigen Typ.
+      </div>
+
+      <div v-else>
         <div v-if="editMode && user" class="cms-block-label">
           {{ blockLabel(block) }}
         </div>
 
-      <!-- HERO BLOCK -->
-      <section v-if="block.blockType === 'hero'" 
+        <!-- HERO BLOCK -->
+        ...
+      </div>
+    </div>
+  </div>
+</template>
+
                class="hero-section" 
                :class="{ 'is-beautiful': block.variant === 'beautiful' }">
         <div class="hero-bg" :style="{ backgroundImage: `url(${block.backgroundImage?.url || '/sportboot.png'})` }"></div>
@@ -149,6 +152,12 @@ const getIcon = (iconName: string) => {
           </div>
         </div>
       </section>
+
+      <!-- EVENTS BLOCK -->
+      <EventsSection v-else-if="block.blockType === 'events'" :limit="block.limit" />
+
+      <!-- NEWS BLOCK -->
+      <NewsSection v-else-if="block.blockType === 'news'" :limit="block.limit" />
 
       <!-- PEGEL & WETTER BLOCK -->
       <section v-else-if="block.blockType === 'pegel'" class="pegel-section section">
@@ -384,7 +393,6 @@ const getIcon = (iconName: string) => {
           </div>
         </div>
       </section>
-      </div>
     </div>
   </div>
 </template>

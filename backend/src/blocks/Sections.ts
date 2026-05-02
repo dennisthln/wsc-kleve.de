@@ -129,3 +129,19 @@ export const ContactBlock: Block = {
     { name: 'description', type: 'text', defaultValue: 'Haben Sie Fragen? Wir freuen uns auf Ihre Nachricht.' },
   ]
 }
+
+export const EventsBlock: Block = {
+  slug: 'events',
+  labels: { singular: 'Termine/Events', plural: 'Termine/Events' },
+  fields: [
+    { name: 'limit', type: 'number', defaultValue: 3, label: 'Anzahl Termine' },
+  ]
+}
+
+export const NewsBlock: Block = {
+  slug: 'news',
+  labels: { singular: 'Neuigkeiten (Grid)', plural: 'Neuigkeiten (Grid)' },
+  fields: [
+    { name: 'limit', type: 'number', defaultValue: 3, label: 'Anzahl News' },
+  ]
+}

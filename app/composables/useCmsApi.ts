@@ -30,13 +30,19 @@ export const useCmsApi = () => {
   const cmsFetch = async <T>(path: string, options: Record<string, any> = {}) => {
     const url = cmsUrl(path)
     try {
-      return await $fetch<T>(url, {
+      const response = await $fetch.raw<T>(url, {
         credentials: 'include',
         ...options,
       })
+      
+      if (import.meta.server) {
+        console.log(`[SSR API Success] ${url}: Status ${response.status}`)
+      }
+      
+      return response._data as T
     } catch (error: any) {
       if (import.meta.server) {
-        console.error(`[SSR API Error] ${url}:`, error.message || error)
+        console.error(`[SSR API Error] ${url}:`, error.statusCode || error.status, error.message || error)
       }
       throw error
     }

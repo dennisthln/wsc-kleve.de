@@ -331,6 +331,18 @@ export interface Page {
             blockName?: string | null;
             blockType: 'board';
           }
+        | {
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'events';
+          }
+        | {
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'news';
+          }
       )[]
     | null;
   updatedAt: string;
@@ -618,6 +630,20 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               subheading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        events?:
+          | T
+          | {
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        news?:
+          | T
+          | {
+              limit?: T;
               id?: T;
               blockName?: T;
             };
