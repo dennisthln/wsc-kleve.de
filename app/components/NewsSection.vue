@@ -55,8 +55,12 @@
 <script setup lang="ts">
 import { ArrowRight, Calendar } from 'lucide-vue-next'
 
+const props = defineProps<{
+  limit?: number
+}>()
+
 const { cmsUrl } = useCmsApi()
-const { data: news, pending } = await useFetch<any>(cmsUrl('/news?sort=-publishDate&limit=3'))
+const { data: news, pending } = await useFetch<any>(() => cmsUrl(`/news?sort=-publishDate&limit=${props.limit || 3}`))
 
 const getExcerpt = (content: any) => {
   try {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Anchor, Ship, Waves, Users, Activity, ArrowRight, Phone, MapPin, Mail, ChevronRight } from 'lucide-vue-next'
+import { Anchor, Ship, Waves, Users, Activity, ArrowRight, Phone, MapPin, Mail, ChevronRight, Cloud } from 'lucide-vue-next'
 import PegelDisplay from './PegelDisplay.vue'
 import WeatherDisplay from './WeatherDisplay.vue'
 import EventsSection from './EventsSection.vue'
@@ -11,8 +11,9 @@ const props = defineProps<{
 }>()
 
 // Fetch Board Members if board block is present
+const { cmsUrl } = useCmsApi()
 const hasBoardBlock = computed(() => props.blocks?.some(b => b.blockType === 'board'))
-const { data: boardData } = await useFetch('/api/board-members?sort=order', {
+const { data: boardData } = await useFetch(() => cmsUrl('/board-members?sort=order'), {
   immediate: hasBoardBlock.value,
   watch: [hasBoardBlock]
 })
@@ -53,29 +54,21 @@ const getIcon = (iconName: string) => {
     sailing: Ship
   }
   return icons[iconName] || Anchor
+}
+</script>
+
 <template>
   <div class="blocks-renderer">
     <div v-for="(block, index) in blocks" :key="index" class="cms-block-shell"
          :class="{ 'is-editable': editMode && user, 'is-selected': selectedBlockIndex === resolveBlockIndex(index) }"
          @click="user && selectBlock(resolveBlockIndex(index))">
-
-      <!-- Error boundary or simple check -->
-      <div v-if="!block.blockType" class="bg-red-100 p-4 text-red-800">
-        Block an Index {{ index }} hat keinen gültigen Typ.
+      
+      <div v-if="editMode && user" class="cms-block-label">
+        {{ blockLabel(block) }}
       </div>
 
-      <div v-else>
-        <div v-if="editMode && user" class="cms-block-label">
-          {{ blockLabel(block) }}
-        </div>
-
-        <!-- HERO BLOCK -->
-        ...
-      </div>
-    </div>
-  </div>
-</template>
-
+      <!-- HERO BLOCK -->
+      <section v-if="block.blockType === 'hero'" 
                class="hero-section" 
                :class="{ 'is-beautiful': block.variant === 'beautiful' }">
         <div class="hero-bg" :style="{ backgroundImage: `url(${block.backgroundImage?.url || '/sportboot.png'})` }"></div>
@@ -393,6 +386,33 @@ const getIcon = (iconName: string) => {
           </div>
         </div>
       </section>
+
+      <!-- CONTACT BLOCK -->
+      <section v-else-if="block.blockType === 'contact'" class="contact-section section">
+        <div class="container">
+          <header class="section-header text-center" v-animate-on-scroll>
+            <CmsEditableText
+              tag="h2"
+              class="section-title"
+              :block-index="resolveBlockIndex(index)"
+              :path="['title']"
+              :value="block.title || 'Schreiben Sie uns'"
+            />
+            <CmsEditableText
+              tag="p"
+              class="section-subtitle"
+              :block-index="resolveBlockIndex(index)"
+              :path="['description']"
+              :value="block.description || 'Haben Sie Fragen? Wir freuen uns auf Ihre Nachricht.'"
+              multiline
+            />
+          </header>
+          <div class="max-w-2xl mx-auto" v-animate-on-scroll>
+            <FormContact />
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 </template>
@@ -522,6 +542,10 @@ const getIcon = (iconName: string) => {
 .person-name { font-size: 2.2rem; margin-bottom: 1.5rem; }
 .person-details { display: grid; gap: 0.5rem; }
 .person-detail { font-size: 1.1rem; color: var(--color-text-muted); }
+
+.contact-section { background: white; }
+.max-w-2xl { max-width: 42rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
 
 @media (max-width: 992px) {
   .pegel-weather-grid { grid-template-columns: 1fr; gap: 2rem; }

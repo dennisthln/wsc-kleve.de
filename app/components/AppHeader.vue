@@ -2,15 +2,16 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Menu, X } from 'lucide-vue-next'
 
-const { cmsUrl } = useCmsApi()
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 
 // Fetch Navigation from CMS (Client only for stability)
-const { data: navData } = await useFetch(cmsUrl('/globals/navigation'), {
+const { cmsUrl } = useCmsApi()
+const { data: navData } = await useFetch(() => cmsUrl('/globals/navigation'), {
   server: false,
   lazy: true
 })
+
 
 // Simplified flat navigation fallback
 const fallbackNav = [
