@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TrendingUp, TrendingDown } from 'lucide-vue-next'
 
-const { data: nauticalData, pending, error } = await useFetch<any>('/api/nautical-data')
+const { data: nauticalData, pending, error } = await useFetch<any>('/nautical-data')
 const pegel = computed(() => nauticalData.value?.pegel)
 
 const getStatusLabel = (state: string) => {

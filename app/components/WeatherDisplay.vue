@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Cloud, Sun, CloudRain, CloudLightning, CloudSnow, Wind, Droplets } from 'lucide-vue-next'
 
-const { data: nauticalData, pending, error } = await useFetch<any>('/api/nautical-data')
+const { data: nauticalData, pending, error } = await useFetch<any>('/nautical-data')
 const weather = computed(() => nauticalData.value?.weather)
 
 const getWeatherIcon = (code: number) => {
