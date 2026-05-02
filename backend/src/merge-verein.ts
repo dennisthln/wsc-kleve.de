@@ -15,7 +15,7 @@ const mergePages = async () => {
     process.exit(1)
   }
   
-  const steganlageBlocks = steganlagePage.docs[0].layout
+  const steganlageBlocks = steganlagePage.docs[0].layout || []
 
   // 2. Get Verein Page
   const vereinPage = await payload.find({
@@ -28,13 +28,13 @@ const mergePages = async () => {
     process.exit(1)
   }
 
-  const existingVereinBlocks = vereinPage.docs[0].layout
+  const existingVereinBlocks = vereinPage.docs[0].layout || []
   
   // 3. Filter existing blocks to keep it clean (remove old person blocks if needed, or keep them)
   // Let's create a fresh layout structure
   const newLayout = [
-    existingVereinBlocks[0], // Hero
-    existingVereinBlocks[1], // Intro
+    ...(existingVereinBlocks[0] ? [existingVereinBlocks[0]] : []), // Hero
+    ...(existingVereinBlocks[1] ? [existingVereinBlocks[1]] : []), // Intro
     // Add Steganlage Section Header
     {
       blockType: 'content',
@@ -57,9 +57,9 @@ const mergePages = async () => {
         }
       }
     },
-    ...steganlageBlocks.filter(b => b.blockType !== 'hero'), // Add all steganlage blocks except hero
+    ...steganlageBlocks.filter((b: any) => b.blockType !== 'hero'), // Add all steganlage blocks except hero
     // Keep Vorstand info (if it was there)
-    ...existingVereinBlocks.filter(b => b.blockType === 'person' || b.blockType === 'info')
+    ...existingVereinBlocks.filter((b: any) => b.blockType === 'person' || b.blockType === 'info')
   ]
 
   // 4. Update Verein Page
