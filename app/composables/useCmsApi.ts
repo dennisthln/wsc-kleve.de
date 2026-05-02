@@ -16,7 +16,7 @@ export const useCmsApi = () => {
     } else {
       // If publicBase is relative (e.g. /api), we need an absolute URL on server
       // Default to the internal port 3000 where Payload is running
-      apiBase = 'http://127.0.0.1:3000/api'
+      apiBase = 'http://localhost:3000/api'
     }
   }
 
@@ -34,12 +34,19 @@ export const useCmsApi = () => {
     return url
   }
 
-  const cmsFetch = <T>(path: string, options: Record<string, any> = {}) => {
+  const cmsFetch = async <T>(path: string, options: Record<string, any> = {}) => {
     const url = cmsUrl(path)
-    return $fetch<T>(url, {
-      credentials: 'include',
-      ...options,
-    })
+    try {
+      return await $fetch<T>(url, {
+        credentials: 'include',
+        ...options,
+      })
+    } catch (error: any) {
+      if (import.meta.server) {
+        console.error(`[SSR API Error] ${url}:`, error.message || error)
+      }
+      throw error
+    }
   }
 
   return {
