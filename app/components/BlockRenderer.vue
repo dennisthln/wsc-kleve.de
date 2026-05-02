@@ -510,7 +510,7 @@ const getIcon = (iconName: string) => {
 .hero-section.is-beautiful .hero-overlay { background: linear-gradient(135deg, rgba(10, 36, 114, 0.85) 0%, rgba(0, 119, 190, 0.65) 100%); }
 .hero-container { position: relative; z-index: 10; text-align: center; width: 100%; }
 .hero-section.is-beautiful .hero-container { max-width: 800px; }
-.hero-title { 
+.hero-title {
   font-size: clamp(3rem, 5vw, 6rem);
   line-height: 1.1;
   color: white; 
@@ -521,7 +521,7 @@ const getIcon = (iconName: string) => {
   margin: 0 auto 1.5rem;
 }
 .hero-section.is-beautiful .hero-title { 
-  font-size: clamp(2rem, 6vw, 5rem); 
+  font-size: clamp(3rem, 5vw, 6rem);
   text-shadow: 0 4px 20px rgba(0,0,0,0.3); 
 }
 .hero-subtitle { font-size: clamp(1.2rem, 2vw, 1.8rem); max-width: 900px; margin: 0 auto; opacity: 0.9; }
