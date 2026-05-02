@@ -1,0 +1,47 @@
+name: Deploy WSC Kleve
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "backend/**"
+      - "docker-compose.yml"
+      - ".github/workflows/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H wsc-kleve.de >> ~/.ssh/known_hosts
+
+      - name: Sync files to server
+        run: |
+          rsync -avz --delete \
+            --exclude='node_modules' \
+            --exclude='.nuxt' \
+            --exclude='.output' \
+            --exclude='.next' \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.idea' \
+            --exclude='backend/payload.db' \
+            --exclude='backend/media' \
+            ./ \
+            root@wsc-kleve.de:/var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
+
+      - name: Deploy Containers
+        run: |
+          ssh root@wsc-kleve.de << 'EOF'
+            cd /var/www/vhosts/kleverweb.de/wsc-kleve.kleverweb.de/
+            docker-compose -p wsc-kleve up -d --build
+          EOF

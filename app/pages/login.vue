@@ -1,0 +1,1 @@
+<template><div class='container section'><h1>Login</h1><form @submit.prevent class='info-card'><input type='text' placeholder='Benutzer' /><br/><input type='password' placeholder='Passwort' /><br/><button class='btn btn-primary'>Anmelden</button></form></div></template>

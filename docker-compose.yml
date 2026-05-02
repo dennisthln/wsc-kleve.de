@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URI=file:./payload.db
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET:-development_secret}
+    volumes:
+      - ./backend/payload.db:/app/payload.db
+      - ./backend/media:/app/media
+
+  frontend:
+    build:
+      context: ./app
+    ports:
+      - "3001:3000"
+    environment:
+      - NUXT_PUBLIC_API_BASE=http://backend:3000
+    depends_on:
+      - backend
