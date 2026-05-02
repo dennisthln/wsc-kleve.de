@@ -501,6 +501,10 @@ const getIcon = (iconName: string) => {
 .hero-section { position: relative; height: 90vh; display: flex; align-items: center; overflow: hidden; color: white; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 .hero-section.is-beautiful { height: 70vh; min-height: 600px; margin-bottom: -100px; text-align: center; }
 .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-attachment: fixed; background-color: var(--color-primary); }
+
+@media (max-width: 1024px) {
+  .hero-bg { background-attachment: scroll; }
+}
 .hero-section.is-beautiful .hero-bg { transform: scale(1.05); }
 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10, 36, 114, 0.6), rgba(10, 36, 114, 0.9)); }
 .hero-section.is-beautiful .hero-overlay { background: linear-gradient(135deg, rgba(10, 36, 114, 0.85) 0%, rgba(0, 119, 190, 0.65) 100%); }

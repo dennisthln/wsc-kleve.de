@@ -299,18 +299,18 @@ const closeMenu = () => {
 }
 
 .mobile-nav-li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .mobile-nav-a {
   display: flex;
-  align-items: baseline;
-  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
   color: white;
   text-decoration: none;
   position: relative;
-  padding: 0.8rem 0;
+  padding: 0.4rem 0;
 }
 
 .nav-number {
