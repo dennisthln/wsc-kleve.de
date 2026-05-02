@@ -14,12 +14,12 @@ const { data: settings } = await useAsyncData('site-settings', async () => {
   }
 })
 
-if (!homepage.value) {
+/*if (!homepage.value) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Startseite nicht gefunden',
   })
-}
+}*/
 </script>
 
 <template>
