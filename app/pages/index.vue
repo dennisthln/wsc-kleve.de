@@ -22,11 +22,15 @@ const { data: settings } = await useAsyncData('site-settings', async () => {
   })
 }*/
 
-watchEffect(() => {
-  if (homepage.value) {
-    syncPage(homepage.value)
-  }
-})
+watch(
+  () => homepage.value?.id,
+  () => {
+    if (homepage.value) {
+      syncPage(homepage.value)
+    }
+  },
+  { immediate: true },
+)
 
 const renderedPage = computed(() => (editMode.value ? draftPage.value : currentPage.value) ?? homepage.value)
 const leadingBlocks = computed(() => renderedPage.value?.layout?.filter((block: any) => block.blockType === 'hero' || block.blockType === 'pegel') ?? [])
