@@ -1,6 +1,7 @@
 import { de } from '@payloadcms/translations/languages/de'
 import { en } from '@payloadcms/translations/languages/en'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -18,6 +19,9 @@ import { Navigation } from './globals/Navigation'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const databaseUri = process.env.DATABASE_URI || ''
+const isPostgres = databaseUri.startsWith('postgres')
 
 export default buildConfig({
   admin: {
@@ -44,13 +48,17 @@ export default buildConfig({
   i18n: {
     supportedLanguages: { de, en },
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString:
-        process.env.DATABASE_URI ||
-        'postgresql://payload:payload@127.0.0.1:5432/wsc_kleve',
-    },
-  }),
+  db: isPostgres 
+    ? postgresAdapter({
+        pool: {
+          connectionString: databaseUri,
+        },
+      })
+    : sqliteAdapter({
+        client: {
+          url: databaseUri || 'file:./payload.db',
+        },
+      }),
   sharp,
   plugins: [],
 })

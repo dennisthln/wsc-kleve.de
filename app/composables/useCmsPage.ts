@@ -2,9 +2,7 @@ type CmsPageResult = {
   docs?: Array<Record<string, any>>
 }
 
-const fetchCmsPageBySlug = async (slug: string) => {
-  const { cmsFetch } = useCmsApi()
-
+const fetchCmsPageBySlug = async (slug: string, cmsFetch: any) => {
   try {
     const result = await cmsFetch<CmsPageResult>('/pages', {
       query: {
@@ -18,6 +16,10 @@ const fetchCmsPageBySlug = async (slug: string) => {
     
     return result
   } catch (error: any) {
+    if (import.meta.server) {
+      console.error(`[useCmsPage] Error fetching "${slug}":`, error.statusCode || error.status, error.message || error)
+    }
+    
     if (error?.statusCode === 404) {
       return { docs: [] }
     }
@@ -26,19 +28,28 @@ const fetchCmsPageBySlug = async (slug: string) => {
   }
 }
 
+/**
+ * Robustly load a page by its slug, trying multiple candidates (with/without slashes)
+ */
 export const loadCmsPage = async (slug: string) => {
+  // Call composable immediately to capture Nuxt context before any awaits
+  const { cmsFetch } = useCmsApi()
+  
   const normalizedSlug = slug === '/' ? '/' : slug.replace(/\/+$/, '')
   const candidates =
     normalizedSlug === '/'
-      ? ['/', 'home']
-      : [normalizedSlug, normalizedSlug.replace(/^\//, '')]
+      ? ['home', '/']
+      : [normalizedSlug.replace(/^\//, ''), normalizedSlug, `/${normalizedSlug.replace(/^\//, '')}`]
+
+  // Remove duplicates
+  const uniqueCandidates = [...new Set(candidates)]
 
   if (import.meta.server) {
-    console.log(`[useCmsPage] Loading page for slug: "${slug}", candidates: ${JSON.stringify(candidates)}`)
+    console.log(`[useCmsPage] Loading page for slug: "${slug}", unique candidates: ${JSON.stringify(uniqueCandidates)}`)
   }
 
-  for (const candidate of candidates) {
-    const page = await fetchCmsPageBySlug(candidate)
+  for (const candidate of uniqueCandidates) {
+    const page = await fetchCmsPageBySlug(candidate, cmsFetch)
 
     if (page.docs?.[0]) {
       if (import.meta.server) {
@@ -49,7 +60,7 @@ export const loadCmsPage = async (slug: string) => {
   }
 
   if (import.meta.server) {
-    console.warn(`[useCmsPage] No page found for slug: "${slug}"`)
+    console.warn(`[useCmsPage] No page found for slug: "${slug}" after trying all candidates.`)
   }
   return null
 }
