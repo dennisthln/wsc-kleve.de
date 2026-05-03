@@ -52,7 +52,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
           <ul class="contact-info">
             <li><MapPin :size="18" class="icon" /> Griethausener Altrhein, Kleve</li>
             <li><Mail :size="18" class="icon" /> <a href="mailto:info@wsc-kleve.de">info@wsc-kleve.de</a></li>
-            <li><Phone :size="18" class="icon" /> +49 (0) 123 456789</li>
+            <li><Phone :size="18" class="icon" /> +49 176 23363705</li>
           </ul>
         </div>
       </div>
