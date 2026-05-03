@@ -81,7 +81,7 @@ const getTime = (date: string) => {
 
 .section-title {
   margin-bottom: 1.5rem;
-  display: block;
+  display: inline-block;
 }
 
 .section-subtitle {
