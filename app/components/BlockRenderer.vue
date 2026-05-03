@@ -4,6 +4,7 @@ import PegelDisplay from './PegelDisplay.vue'
 import WeatherDisplay from './WeatherDisplay.vue'
 import EventsSection from './EventsSection.vue'
 import NewsSection from './NewsSection.vue'
+import {NuxtLink} from "#components";
 
 const props = defineProps<{
   blocks?: any[]
@@ -208,7 +209,7 @@ const getIcon = (iconName: string) => {
           </header>
           <div :class="block.variant === 'overlap' ? 'teaser-grid' : 'features-grid'" v-if="block.features">
             <component 
-              :is="feature.link ? 'NuxtLink' : 'div'"
+              :is="feature.link ? NuxtLink : 'div'"
               v-for="(feature, fIndex) in block.features" :key="fIndex" 
               :to="feature.link"
               class="feature-card hover-lift" 
