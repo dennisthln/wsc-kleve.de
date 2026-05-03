@@ -606,7 +606,7 @@ const getIcon = (iconName: string) => {
 .mx-auto { margin-left: auto; margin-right: auto; }
 
 /* Sponsors Styles */
-.sponsors-section { background: var(--color-bg-alt); padding: 5rem 0 !important; }
+.sponsors-section { padding: 5rem 0 !important; }
 .sponsors-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 3rem; margin-top: 3.5rem; }
 .sponsor-item { display: block; max-width: 160px; transition: all 0.3s ease; filter: grayscale(1); opacity: 0.5; }
 .sponsor-item:hover { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
