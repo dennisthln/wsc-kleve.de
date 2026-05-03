@@ -74,7 +74,7 @@ const getIcon = (iconName: string) => {
                :class="{ 'is-beautiful': block.variant === 'beautiful' }">
         <div class="hero-bg" :style="{ backgroundImage: `url(${block.backgroundImage?.url || '/sportboot.png'})` }"></div>
         <div class="hero-overlay"></div>
-        <div class="container hero-container" v-animate-on-scroll>
+        <div class="container hero-container" v-animate-on-scroll="{ animation: 'zoom-out', duration: 1200 }">
           <CmsEditableText
             tag="h1"
             class="hero-title"
@@ -96,7 +96,7 @@ const getIcon = (iconName: string) => {
       <!-- BOARD BLOCK -->
       <section v-else-if="block.blockType === 'board'" class="vorstand-section section">
         <div class="container">
-          <header class="section-header text-center" v-animate-on-scroll>
+          <header class="section-header text-center" v-animate-on-scroll="{ animation: 'fade-up' }">
             <CmsEditableText
               tag="h2"
               class="section-title"
@@ -116,7 +116,7 @@ const getIcon = (iconName: string) => {
 
           <div class="vorstand-grid" v-if="boardMembers.length">
             <div v-for="(person, pIdx) in boardMembers" :key="person.id" 
-                 class="vorstand-card glass" v-animate-on-scroll="{ delay: pIdx * 50 }">
+                 class="vorstand-card glass hover-lift" v-animate-on-scroll="{ animation: 'fade-up', delay: pIdx * 100 }">
               <div class="vorstand-img-container">
                 <img v-if="person.image" :src="person.image.url" :alt="person.name" class="vorstand-img" />
                 <img v-else src="/logo.png" :alt="person.name" class="vorstand-img placeholder" />
@@ -158,7 +158,7 @@ const getIcon = (iconName: string) => {
         <div class="container">
           <div class="pegel-weather-grid">
             <!-- Pegel Card -->
-            <div class="pegel-card glass" v-animate-on-scroll>
+            <div class="pegel-card glass hover-lift" v-animate-on-scroll="{ animation: 'fade-right' }">
               <div class="pegel-info">
                 <Activity class="pegel-icon" />
                 <div>
@@ -170,7 +170,7 @@ const getIcon = (iconName: string) => {
             </div>
 
             <!-- Weather Card -->
-            <div class="pegel-card weather-card glass" v-animate-on-scroll="{ delay: 150 }">
+            <div class="pegel-card weather-card glass hover-lift" v-animate-on-scroll="{ animation: 'fade-left', delay: 150 }">
               <div class="pegel-info">
                 <Cloud class="pegel-icon weather-icon" />
                 <div>
@@ -189,7 +189,7 @@ const getIcon = (iconName: string) => {
                class="features-section section"
                :class="{ 'is-overlap': block.variant === 'overlap' }">
         <div class="container">
-          <header v-if="block.variant !== 'overlap'" class="section-header" v-animate-on-scroll>
+          <header v-if="block.variant !== 'overlap'" class="section-header" v-animate-on-scroll="{ animation: 'fade-up' }">
             <CmsEditableText
               tag="h2"
               class="section-title"
@@ -211,9 +211,9 @@ const getIcon = (iconName: string) => {
               :is="feature.link ? 'NuxtLink' : 'div'"
               v-for="(feature, fIndex) in block.features" :key="fIndex" 
               :to="feature.link"
-              class="feature-card" 
+              class="feature-card hover-lift" 
               :class="{ 'is-link': feature.link, 'glass': block.variant === 'overlap' }"
-              v-animate-on-scroll="{ delay: fIndex * 100 }"
+              v-animate-on-scroll="{ animation: 'fade-up', delay: fIndex * 100 }"
             >
               <div class="feature-icon-wrapper">
                 <component :is="getIcon(feature.icon)" :size="32" class="feature-icon" />
@@ -244,7 +244,7 @@ const getIcon = (iconName: string) => {
       <!-- CONTENT BLOCK -->
       <section v-else-if="block.blockType === 'content'" class="content-section section" :class="{ 'bg-accent': block.accent }">
         <div class="container">
-          <div class="content-card" :class="{ 'two-cols': block.columns === '2' }" v-animate-on-scroll>
+          <div class="content-card" :class="{ 'two-cols': block.columns === '2' }" v-animate-on-scroll="{ animation: 'fade-up' }">
             <div class="rich-text-wrapper">
                <div v-if="block.text && block.text.root">
                  <div v-for="(node, nIdx) in block.text.root.children" :key="nIdx" class="rich-node">
@@ -278,7 +278,7 @@ const getIcon = (iconName: string) => {
       <!-- CTA BLOCK -->
       <section v-else-if="block.blockType === 'cta'" class="cta-section section">
         <div class="container">
-          <div class="cta-card glass" v-animate-on-scroll>
+          <div class="cta-card glass hover-lift" v-animate-on-scroll="{ animation: 'zoom-in' }">
             <CmsEditableText
               tag="h2"
               :block-index="resolveBlockIndex(index)"
@@ -287,6 +287,7 @@ const getIcon = (iconName: string) => {
             />
             <CmsEditableText
               tag="p"
+              class="mb-8 block opacity-90"
               :block-index="resolveBlockIndex(index)"
               :path="['description']"
               :value="block.description || ''"
@@ -308,7 +309,7 @@ const getIcon = (iconName: string) => {
       <section v-else-if="block.blockType === 'info'" class="info-section section">
         <div class="container">
           <div class="info-grid">
-            <div class="info-intro" v-animate-on-scroll>
+            <div class="info-intro" v-animate-on-scroll="{ animation: 'fade-right' }">
               <CmsEditableText
                 tag="h2"
                 class="section-title"
@@ -319,7 +320,7 @@ const getIcon = (iconName: string) => {
             </div>
             <div class="info-items" v-if="block.items">
               <div v-for="(item, iIdx) in block.items" :key="iIdx" 
-                   class="info-card-item" v-animate-on-scroll="{ delay: iIdx * 100 }">
+                   class="info-card-item hover-lift" v-animate-on-scroll="{ animation: 'fade-left', delay: iIdx * 100 }">
                 <CmsEditableText
                   tag="span"
                   class="info-label"
@@ -343,18 +344,19 @@ const getIcon = (iconName: string) => {
       <!-- PERSON BLOCK -->
       <section v-else-if="block.blockType === 'person'" class="person-section section">
         <div class="container">
-          <div class="person-card glass" v-animate-on-scroll>
+          <div class="person-card glass hover-lift" v-animate-on-scroll="{ animation: 'fade-up' }">
             <div class="person-img-wrapper" v-if="block.image">
               <img :src="block.image.url" :alt="block.name" class="person-img" />
             </div>
             <div class="person-info">
-              <CmsEditableText
-                tag="span"
-                class="person-role"
-                :block-index="resolveBlockIndex(index)"
-                :path="['role']"
-                :value="block.role || ''"
-              />
+              <span class="person-role">
+                <CmsEditableText
+                  tag="span"
+                  :block-index="resolveBlockIndex(index)"
+                  :path="['role']"
+                  :value="block.role || ''"
+                />
+              </span>
               <CmsEditableText
                 tag="h3"
                 class="person-name"
@@ -391,7 +393,7 @@ const getIcon = (iconName: string) => {
       <!-- CONTACT BLOCK -->
       <section v-else-if="block.blockType === 'contact'" class="contact-section section">
         <div class="container">
-          <header class="section-header text-center" v-animate-on-scroll>
+          <header class="section-header text-center" v-animate-on-scroll="{ animation: 'fade-up' }">
             <CmsEditableText
               tag="h2"
               class="section-title"
@@ -408,7 +410,7 @@ const getIcon = (iconName: string) => {
               multiline
             />
           </header>
-          <div class="max-w-2xl mx-auto" v-animate-on-scroll>
+          <div class="max-w-2xl mx-auto" v-animate-on-scroll="{ animation: 'fade-up', delay: 200 }">
             <FormContact />
           </div>
         </div>
@@ -417,7 +419,7 @@ const getIcon = (iconName: string) => {
       <!-- SPONSORS BLOCK -->
       <section v-else-if="block.blockType === 'sponsors'" class="sponsors-section section">
         <div class="container">
-          <header class="section-header text-center" v-animate-on-scroll>
+          <header class="section-header text-center" v-animate-on-scroll="{ animation: 'fade-up' }">
             <CmsEditableText
               tag="h2"
               class="section-title"
@@ -434,7 +436,7 @@ const getIcon = (iconName: string) => {
               target="_blank"
               class="sponsor-item"
               :class="{ 'is-link': sponsor.link }"
-              v-animate-on-scroll="{ delay: sIdx * 50 }"
+              v-animate-on-scroll="{ animation: 'zoom-in', delay: sIdx * 80 }"
             >
               <img v-if="sponsor.logo" :src="sponsor.logo.url" :alt="sponsor.name" class="sponsor-logo" />
               <span v-else class="sponsor-name-fallback">{{ sponsor.name }}</span>
@@ -548,7 +550,7 @@ const getIcon = (iconName: string) => {
 .contact-link { font-weight: 600; color: var(--color-primary); transition: color 0.3s ease; }
 .contact-link:hover { color: var(--color-secondary); }
 
-.section-header { text-align: center; margin-bottom: 5rem; }
+.section-header { text-align: center; margin-bottom: 10px; }
 .section-subtitle { color: var(--color-text-muted); font-size: 1.2rem; max-width: 600px; margin: 1.5rem auto 0; }
 .features-section.is-overlap { position: relative; z-index: 20; padding-bottom: 6rem; margin-top: -180px; }
 .teaser-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
@@ -560,8 +562,8 @@ const getIcon = (iconName: string) => {
 .feature-card.glass .feature-link-indicator { opacity: 1; transform: none; margin-top: 2rem; color: var(--color-secondary); font-size: 1.1rem; }
 .feature-card.glass:hover .feature-link-indicator { gap: 1rem; color: var(--color-primary); }
 
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem; }
-.feature-card { padding: 3rem 2rem; background: var(--color-bg); border-radius: var(--radius-lg); transition: var(--transition); text-align: center; color: inherit; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem; margin-top: 30px; }
+.feature-card { padding: 16px 2rem; background: var(--color-bg); border-radius: var(--radius-lg); transition: var(--transition); text-align: center; color: inherit; }
 .feature-card.is-link:hover { transform: translateY(-10px); background: white; box-shadow: var(--shadow-md); }
 .feature-icon-wrapper { width: 70px; height: 70px; background: var(--color-primary); color: var(--color-accent); display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 2rem; transform: rotate(-5deg); transition: var(--transition); }
 .feature-link-indicator { margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--color-secondary); font-weight: 700; font-size: 0.9rem; opacity: 0; transform: translateY(10px); transition: var(--transition); }

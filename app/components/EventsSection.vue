@@ -2,7 +2,7 @@
   <section class="events-section section">
     <div class="container">
       <div class="events-layout">
-        <div class="events-info" v-animate-on-scroll>
+        <div class="events-info" v-animate-on-scroll="{ animation: 'fade-right' }">
           <span class="badge">Termine</span>
           <h2 class="section-title">Anstehende Events</h2>
           <p class="section-subtitle">
@@ -22,7 +22,7 @@
               :key="event.id" 
               to="/news/termine"
               class="event-item"
-              v-animate-on-scroll="{ delay: idx * 100 }"
+              v-animate-on-scroll="{ animation: 'fade-left', delay: idx * 100 }"
             >
               <div class="event-date">
                 <span class="day">{{ new Date(event.date).getDate() }}</span>

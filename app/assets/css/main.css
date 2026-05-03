@@ -128,14 +128,80 @@ a {
   border-radius: 2px;
 }
 
-/* Global Animation Styles */
-[v-animate-on-scroll] {
+/* Global Animation Styles & Reveals */
+.reveal-base {
   opacity: 0;
-  transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
-[v-animate-on-scroll].is-visible {
+.reveal-base.is-revealed {
   opacity: 1;
-  transform: translateY(0);
+}
+
+/* Specific reveal directions */
+.reveal-fade-up { transform: translateY(40px); }
+.reveal-fade-down { transform: translateY(-40px); }
+.reveal-fade-left { transform: translateX(40px); }
+.reveal-fade-right { transform: translateX(-40px); }
+.reveal-zoom-in { transform: scale(0.95); }
+.reveal-zoom-out { transform: scale(1.05); }
+
+.is-revealed.reveal-fade-up,
+.is-revealed.reveal-fade-down,
+.is-revealed.reveal-fade-left,
+.is-revealed.reveal-fade-right {
+  transform: translate(0, 0);
+}
+
+.is-revealed.reveal-zoom-in,
+.is-revealed.reveal-zoom-out {
+  transform: scale(1);
+}
+
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Modern Hover Effects */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+}
+
+/* Nautical Floating Animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(2deg); }
+  75% { transform: rotate(-2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-wave {
+  animation: wave 8s ease-in-out infinite;
 }

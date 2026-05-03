@@ -1,7 +1,7 @@
 <template>
   <section class="news-section section">
     <div class="container">
-      <header class="section-header" v-animate-on-scroll>
+      <header class="section-header" v-animate-on-scroll="{ animation: 'fade-up' }">
         <div class="header-content">
           <span class="badge">Neuigkeiten</span>
           <h2 class="section-title">Aktuelles vom Club</h2>
@@ -18,8 +18,8 @@
         <article 
           v-for="(item, idx) in news.docs.slice(0, props.limit || 3)" 
           :key="item.id" 
-          class="news-card"
-          v-animate-on-scroll="{ delay: idx * 100 }"
+          class="news-card hover-lift"
+          v-animate-on-scroll="{ animation: 'fade-up', delay: idx * 150 }"
         >
           <NuxtLink :to="'/news/aktuelles#' + item.id" class="card-image-link">
             <div class="card-image">

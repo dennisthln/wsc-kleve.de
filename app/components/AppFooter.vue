@@ -4,10 +4,17 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
 
 <template>
   <footer class="footer">
+    <!-- Decorative Wave Overlay -->
+    <div class="footer-wave">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+      </svg>
+    </div>
+
     <div class="footer-top">
       <div class="container footer-grid">
         <!-- Brand Section -->
-        <div class="footer-brand">
+        <div class="footer-brand" v-animate-on-scroll="{ animation: 'fade-right' }">
           <img src="/logo-white.svg" class="footer-logo" />
           <p class="brand-desc">
             Ihr traditioneller Wassersportclub am Niederrhein. Erleben Sie Gemeinschaft, Natur und die Freiheit auf dem Wasser seit 1970.
@@ -19,7 +26,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
         </div>
         
         <!-- Navigation Section -->
-        <div class="footer-nav">
+        <div class="footer-nav" v-animate-on-scroll="{ animation: 'fade-up', delay: 100 }">
           <h4 class="footer-title">Navigation</h4>
           <ul class="nav-links">
             <li><NuxtLink to="/">Startseite</NuxtLink></li>
@@ -32,7 +39,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
         </div>
 
         <!-- Rechtliches Section -->
-        <div class="footer-legal">
+        <div class="footer-legal" v-animate-on-scroll="{ animation: 'fade-up', delay: 200 }">
           <h4 class="footer-title">Rechtliches</h4>
           <ul class="nav-links">
             <li><NuxtLink to="/satzung">Satzung & Ordnungen</NuxtLink></li>
@@ -42,7 +49,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
         </div>
 
         <!-- Contact Section -->
-        <div class="footer-contact">
+        <div class="footer-contact" v-animate-on-scroll="{ animation: 'fade-left', delay: 300 }">
           <h4 class="footer-title">Kontakt</h4>
           <ul class="contact-info">
             <li><MapPin :size="18" class="icon" /> Griethausener Altrhein, Kleve</li>
@@ -68,8 +75,29 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
 .footer {
   background-color: var(--color-primary);
   color: white;
-  padding-top: 6rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.footer-wave svg {
+  position: relative;
+  display: block;
+  width: calc(150% + 1.3px);
+  height: 80px;
+}
+
+.footer-wave .shape-fill {
+  fill: var(--color-bg);
 }
 
 .footer-grid {
@@ -80,6 +108,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
 }
 
 .footer-logo {
+  width: 120px;
   color: white;
   margin-bottom: 2rem;
 }
@@ -152,12 +181,6 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
   padding-left: 5px;
 }
 
-.admin-link {
-  color: var(--color-accent) !important;
-  font-weight: 600;
-  opacity: 1 !important;
-}
-
 .contact-info {
   list-style: none;
 }
@@ -205,9 +228,5 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
     gap: 1rem;
     text-align: center;
   }
-}
-
-.footer-logo {
-  width: 120px;
 }
 </style>
