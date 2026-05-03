@@ -488,7 +488,9 @@ const getIcon = (iconName: string) => {
   pointer-events: none;
 }
 
-.pegel-section { background: var(--color-bg); padding: 4rem 0 !important; }
+.pegel-section { position: relative;
+  z-index: 20;
+  margin-top: -180px; padding: 4rem 0 !important;    margin-bottom: -60px; }
 .pegel-weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .pegel-card { background: white; padding: 1.5rem 2rem; border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; box-shadow: var(--shadow-sm); border-left: 4px solid var(--color-accent); }
 .weather-card { border-left-color: var(--color-secondary); }
@@ -498,7 +500,7 @@ const getIcon = (iconName: string) => {
 .pegel-info h3 { margin-bottom: 0; font-size: 1.1rem; font-weight: 700; }
 .pegel-info p { color: var(--color-text-muted); font-size: 0.8rem; margin: 0; }
 
-.hero-section { position: relative; height: 90vh; display: flex; align-items: center; overflow: hidden; color: white; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.hero-section { position: relative; height: 80vh; min-height: 550px; display: flex; align-items: center; overflow: hidden; color: white; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 .hero-section.is-beautiful { height: 70vh; min-height: 600px; margin-bottom: -100px; text-align: center; }
 .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-attachment: fixed; background-color: var(--color-primary); }
 
