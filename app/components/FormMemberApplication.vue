@@ -372,7 +372,7 @@ input:focus { outline: none; border-color: var(--color-secondary); background: w
 .custom-radio-group.vertical { flex-direction: column; gap: 1rem; }
 .custom-radio, .custom-checkbox { display: flex; align-items: center; gap: 1rem; cursor: pointer; position: relative; transition: var(--transition); }
 .custom-radio input, .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
-.radio-box, .checkbox-box { width: 24px; height: 24px; border: 2px solid rgba(10,36,114,0.2); background: white; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+.radio-box, .checkbox-box { flex-shrink: 0; width: 24px; height: 24px; border: 2px solid rgba(10,36,114,0.2); background: white; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
 .radio-box { border-radius: 50%; }
 .checkbox-box { border-radius: 6px; }
 .radio-box::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--color-accent); transform: scale(0); transition: var(--transition); }
