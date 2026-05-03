@@ -75,40 +75,40 @@ const getTime = (date: string) => {
 .events-layout {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 8rem;
+  gap: 4rem;
   align-items: center;
 }
 
 .section-title {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: block;
 }
 
 .section-subtitle {
   color: var(--color-text-muted);
-  font-size: 1.15rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.6;
   max-width: 450px;
 }
 
 .cta-wrapper {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .events-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .event-item {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  padding: 1.75rem 2rem;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
   background: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
   transition: var(--transition);
   text-decoration: none;
   color: inherit;
@@ -116,9 +116,9 @@ const getTime = (date: string) => {
 }
 
 .event-item:hover {
-  transform: translateX(10px);
+  transform: translateX(6px);
   border-color: var(--color-accent);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 25px rgba(10, 36, 114, 0.08);
 }
 
 .event-date {
@@ -128,30 +128,31 @@ const getTime = (date: string) => {
   justify-content: center;
   background: var(--color-primary);
   color: white;
-  min-width: 80px;
-  height: 80px;
-  border-radius: 16px;
+  min-width: 65px;
+  height: 65px;
+  border-radius: 12px;
   flex-shrink: 0;
 }
 
-.event-date .day { font-size: 1.75rem; font-weight: 800; line-height: 1; }
-.event-date .month { font-size: 0.8rem; font-weight: 700; opacity: 0.8; margin-top: 0.25rem; }
+.event-date .day { font-size: 1.4rem; font-weight: 800; line-height: 1; }
+.event-date .month { font-size: 0.7rem; font-weight: 700; opacity: 0.8; margin-top: 0.15rem; }
 
 .event-details {
   flex: 1;
 }
 
 .event-details h3 { 
-  font-size: 1.3rem; 
-  margin-bottom: 0.5rem; 
+  font-size: 1.15rem; 
+  margin-bottom: 0.25rem; 
   color: var(--color-primary);
+  font-weight: 700;
 }
 
 .event-meta { 
   display: flex; 
-  gap: 1.5rem; 
+  gap: 1rem; 
   color: var(--color-text-muted); 
-  font-size: 0.9rem; 
+  font-size: 0.85rem; 
 }
 
 .event-meta span { 

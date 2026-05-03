@@ -17,7 +17,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
         <div class="footer-brand" v-animate-on-scroll="{ animation: 'fade-right' }">
           <img src="/logo-white.svg" class="footer-logo" />
           <p class="brand-desc">
-            Ihr traditioneller Wassersportclub am Niederrhein. Erleben Sie Gemeinschaft, Natur und die Freiheit auf dem Wasser seit 1970.
+            Dein traditioneller Wassersportclub am Niederrhein. Erlebe Gemeinschaft, Natur und die Freiheit auf dem Wasser seit 1970.
           </p>
           <div class="social-links">
             <a href="#" class="social-icon"><Facebook :size="20" /></a>
@@ -30,10 +30,8 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
           <h4 class="footer-title">Navigation</h4>
           <ul class="nav-links">
             <li><NuxtLink to="/">Startseite</NuxtLink></li>
-            <li><NuxtLink to="/news/aktuelles">Aktuelles</NuxtLink></li>
             <li><NuxtLink to="/verein">Der Verein</NuxtLink></li>
-            <li><NuxtLink to="/antrag-liegeplatz" style="color: var(--color-accent); font-weight: 600;">Liegeplatz beantragen</NuxtLink></li>
-            <li><NuxtLink to="/galerie">Galerie</NuxtLink></li>
+            <li><NuxtLink to="/antrag-liegeplatz">Liegeplatz beantragen</NuxtLink></li>
             <li><NuxtLink to="/kontakt">Kontakt</NuxtLink></li>
           </ul>
         </div>
