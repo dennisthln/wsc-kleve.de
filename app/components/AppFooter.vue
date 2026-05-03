@@ -61,9 +61,6 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-vue-next'
     <div class="footer-bottom">
       <div class="container bottom-content">
         <p>&copy; {{ new Date().getFullYear() }} WSCKL - Wassersportclub Kleve e.V. Alle Rechte vorbehalten.</p>
-        <div class="bottom-badges">
-          <span>⚓ Made at Niederrhein</span>
-        </div>
       </div>
     </div>
   </footer>
