@@ -393,8 +393,15 @@ const closeMenu = () => {
 }
 
 @media (max-width: 992px) {
+  .header { height: 80px; }
+  .logo img { width: 80px; }
   .desktop-nav, .desktop-only { display: none; }
   .mobile-toggle { display: block; }
+}
+
+@media (max-width: 768px) {
+  .header { height: 70px; }
+  .logo img { width: 70px; }
 }
 
 /* Simplified stable transitions */

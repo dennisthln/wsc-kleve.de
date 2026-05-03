@@ -253,7 +253,17 @@ const handleSubmit = async () => {
 
 @media (max-width: 768px) {
   .form-card {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.25rem;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 1rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 1.5rem 1rem;
   }
 }
 </style>

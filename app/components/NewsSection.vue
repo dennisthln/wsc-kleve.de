@@ -83,25 +83,14 @@ const { data: news, pending } = await useFetch<any>(() => cmsUrl(`/news?sort=-pu
 }
 
 @media (max-width: 992px) {
-  .section-header { flex-direction: column; align-items: center; text-align: center; gap: 2.5rem; }
+  .section-header { 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    gap: 2.5rem; 
+    margin-bottom: 3.5rem;
+  }
   .news-grid { gap: 2rem; }
-}
-
-.btn-outline {
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
-}
-
-.btn-outline:hover {
-  background: var(--color-primary);
-  color: white;
-}
-
-.desktop-only { display: inline-flex; }
-.mobile-only { display: none; }
-
-@media (max-width: 992px) {
-  .section-header { flex-direction: column; align-items: center; text-align: center; gap: 2rem; }
 }
 
 @media (max-width: 768px) {

@@ -397,9 +397,41 @@ input:focus { outline: none; border-color: var(--color-secondary); background: w
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 @media (max-width: 768px) {
-  .form-card { padding: 2.5rem 1.5rem; }
+  .form-card { padding: 2rem 1.25rem; }
   .form-grid { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
   .steps-indicator { display: none; }
+
+  .step-header { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 1rem; 
+    margin-bottom: 2rem;
+  }
+  
+  .custom-radio-group { 
+    flex-direction: column; 
+    gap: 1rem; 
+  }
+
+  .form-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-nav .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-nav .btn.ml-auto {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card { padding: 1.5rem 1rem; }
+  .step-header h1 { font-size: 1.5rem; }
+  .member-form-container { padding: 0 0.5rem 3rem; }
 }
 </style>
